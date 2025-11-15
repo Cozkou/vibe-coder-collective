@@ -16,7 +16,6 @@ const Workspace = () => {
   const [viewMode, setViewMode] = useState<"preview" | "code" | "document">("preview");
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [currentFeature, setCurrentFeature] = useState<string | undefined>();
-  const [featureClicked, setFeatureClicked] = useState(false);
   const {
     toast
   } = useToast();
@@ -31,7 +30,6 @@ const Workspace = () => {
   };
   const handleFeatureClick = (feature: string) => {
     setCurrentFeature(feature);
-    setFeatureClicked(true);
   };
   const handleClearFeature = () => {
     setCurrentFeature(undefined);
@@ -80,7 +78,7 @@ const Workspace = () => {
       {sessionId && <ShareCodeModal open={shareModalOpen} onClose={() => setShareModalOpen(false)} sessionId={sessionId} />}
       
       {/* Tutorial Overlay */}
-      <TutorialOverlay sessionId={sessionId} onFeatureClicked={featureClicked} />
+      <TutorialOverlay sessionId={sessionId} />
     </div>;
 };
 export default Workspace;
