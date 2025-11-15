@@ -64,23 +64,66 @@ const Hero = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
-      {/* Sun with Rays */}
-      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-64 h-64 pointer-events-none">
-        {/* Rotating Sun */}
-        <div className="absolute inset-0 animate-[spin_20s_linear_infinite]">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-retro-amber to-retro-orange shadow-[0_0_60px_20px_hsl(var(--retro-amber)/0.4)]" />
-          {/* Sun Rays */}
-          {[...Array(12)].map((_, i) => (
+      {/* Realistic Sun */}
+      <div className="absolute -top-[300px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] pointer-events-none">
+        {/* Outer Glow */}
+        <div className="absolute inset-0 rounded-full blur-3xl bg-retro-orange/30 scale-110" />
+        
+        {/* Sun Rays */}
+        <div className="absolute inset-0">
+          {[...Array(16)].map((_, i) => (
             <div
               key={i}
-              className="absolute top-1/2 left-1/2 w-1 h-24 bg-gradient-to-t from-retro-amber to-transparent origin-bottom"
+              className="absolute top-1/2 left-1/2 origin-bottom opacity-40"
               style={{
-                transform: `translate(-50%, -50%) rotate(${i * 30}deg) translateY(-80px)`,
+                width: '3px',
+                height: '200px',
+                background: 'linear-gradient(to top, hsl(var(--retro-amber)), transparent)',
+                transform: `translate(-50%, -50%) rotate(${i * 22.5}deg) translateY(-250px)`,
               }}
             />
           ))}
         </div>
+        
+        {/* Main Sun Body with Globe Effect */}
+        <div className="absolute inset-0 rounded-full overflow-hidden shadow-[0_0_120px_40px_hsl(var(--retro-amber)/0.5)]">
+          {/* Core gradient */}
+          <div className="absolute inset-0 rounded-full bg-gradient-radial from-[hsl(45,100%,65%)] via-[hsl(40,100%,55%)] to-[hsl(35,100%,45%)]" />
+          
+          {/* Rotating texture overlay for globe effect */}
+          <div 
+            className="absolute inset-0 rounded-full opacity-30"
+            style={{
+              background: 'repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.1) 40px, rgba(0,0,0,0.1) 80px)',
+              animation: 'moveTexture 30s linear infinite',
+            }}
+          />
+          
+          {/* Light spots for dimension */}
+          <div className="absolute top-[20%] left-[30%] w-32 h-32 rounded-full bg-[hsl(45,100%,75%)] blur-3xl opacity-60" />
+          <div className="absolute top-[40%] right-[25%] w-24 h-24 rounded-full bg-[hsl(45,100%,70%)] blur-2xl opacity-40" />
+          
+          {/* Surface detail overlay */}
+          <div 
+            className="absolute inset-0 rounded-full opacity-20"
+            style={{
+              background: 'radial-gradient(circle at 35% 35%, transparent 30%, rgba(0,0,0,0.2) 100%)',
+            }}
+          />
+        </div>
+        
+        {/* Atmospheric glow */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-transparent via-retro-amber/20 to-retro-orange/40 blur-xl scale-105" />
       </div>
+      
+      <style>
+        {`
+          @keyframes moveTexture {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(80px); }
+          }
+        `}
+      </style>
       
       {/* Hero Content */}
       <div className="relative z-10 container mx-auto px-4 py-20">
