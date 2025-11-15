@@ -13,6 +13,15 @@ const Workspace = () => {
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [viewMode, setViewMode] = useState<"preview" | "code" | "document">("preview");
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [currentFeature, setCurrentFeature] = useState<string | undefined>();
+
+  const handleFeatureClick = (feature: string) => {
+    setCurrentFeature(feature);
+  };
+
+  const handleClearFeature = () => {
+    setCurrentFeature(undefined);
+  };
 
   const handleOpenPreview = () => {
     window.open(window.location.origin, "_blank");
@@ -75,7 +84,7 @@ const Workspace = () => {
         )}
         
         {/* Left Sidebar - hidden in focus mode */}
-        {!isFocusMode && <WorkspaceSidebar />}
+        {!isFocusMode && <WorkspaceSidebar onFeatureClick={handleFeatureClick} />}
 
         {/* Center - Sandbox Preview */}
         <div className={`flex-1 ${isFocusMode ? 'relative z-20' : ''}`}>
@@ -84,7 +93,7 @@ const Workspace = () => {
       </div>
 
       {/* Floating Input */}
-      <FloatingInput />
+      <FloatingInput currentFeature={currentFeature} onClearFeature={handleClearFeature} />
       {sessionId && (
         <ShareCodeModal
           open={shareModalOpen}
