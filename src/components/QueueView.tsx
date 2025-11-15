@@ -4,15 +4,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Clock } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-
-interface Prompt {
-  id: string;
-  content: string;
-  created_at: string;
-  user_id: string | null;
-  prompt_order: number;
-}
+import { useFirestorePrompts } from "@/hooks/useFirestorePrompts";
 
 interface User {
   id: string;
@@ -21,68 +13,31 @@ interface User {
 }
 
 const QueueView = () => {
-  const { id: sessionId } = useParams();
-  const [prompts, setPrompts] = useState<Prompt[]>([]);
+  const { sessionId } = useParams();
+  const { prompts } = useFirestorePrompts(sessionId);
   const [users, setUsers] = useState<Map<string, User>>(new Map());
 
   useEffect(() => {
-    if (!sessionId) return;
-
-    const fetchPrompts = async () => {
-      const { data, error } = await supabase
-        .from("prompts")
-        .select("*")
-        .eq("session_id", sessionId)
-        .order("prompt_order", { ascending: true });
-
-      if (data && !error) {
-        setPrompts(data);
-        
-        // Generate user colors and initials
-        const userMap = new Map<string, User>();
-        const colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-purple-500", "bg-pink-500"];
-        
-        data.forEach((prompt, index) => {
-          if (prompt.user_id && !userMap.has(prompt.user_id)) {
-            userMap.set(prompt.user_id, {
-              id: prompt.user_id,
-              color: colors[userMap.size % colors.length],
-              initials: `U${userMap.size + 1}`,
-            });
-          }
+    // Generate user colors and initials
+    const userMap = new Map<string, User>();
+    const colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-purple-500", "bg-pink-500"];
+    
+    prompts.forEach((prompt, index) => {
+      if (prompt.userId && !userMap.has(prompt.userId)) {
+        userMap.set(prompt.userId, {
+          id: prompt.userId,
+          color: colors[userMap.size % colors.length],
+          initials: `U${userMap.size + 1}`,
         });
-        
-        setUsers(userMap);
       }
-    };
+    });
+    
+    setUsers(userMap);
+  }, [prompts]);
 
-    fetchPrompts();
-
-    // Subscribe to realtime updates
-    const channel = supabase
-      .channel('prompts-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'prompts',
-          filter: `session_id=eq.${sessionId}`,
-        },
-        () => {
-          fetchPrompts();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [sessionId]);
-
-  const getTimeAgo = (timestamp: string) => {
+  const getTimeAgo = (timestamp: any) => {
     const now = new Date();
-    const created = new Date(timestamp);
+    const created = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
     const seconds = Math.floor((now.getTime() - created.getTime()) / 1000);
     
     if (seconds < 60) return "Just now";
@@ -113,7 +68,7 @@ const QueueView = () => {
           </div>
         ) : (
           prompts.map((prompt) => {
-            const user = prompt.user_id ? users.get(prompt.user_id) : null;
+            const user = prompt.userId ? users.get(prompt.userId) : null;
             return (
               <div key={prompt.id} className="p-2 rounded bg-background border border-border space-y-1.5">
                 <div className="flex items-start justify-between gap-2">
@@ -127,13 +82,16 @@ const QueueView = () => {
                     )}
                     <p className="text-xs font-mono flex-1">{prompt.content}</p>
                   </div>
-                  <Badge variant="secondary" className="shrink-0 text-xs h-5">
-                    done
+                  <Badge 
+                    variant={prompt.status === "completed" ? "secondary" : "default"} 
+                    className="shrink-0 text-xs h-5"
+                  >
+                    {prompt.status}
                   </Badge>
                 </div>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground font-mono pl-7">
                   <Clock className="w-3 h-3" />
-                  <span>{getTimeAgo(prompt.created_at)}</span>
+                  <span>{getTimeAgo(prompt.createdAt)}</span>
                 </div>
               </div>
             );
