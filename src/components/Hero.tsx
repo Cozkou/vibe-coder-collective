@@ -64,27 +64,27 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+    <div className="relative h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Hero Content */}
-      <div className="relative z-10 container mx-auto px-4 py-20">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <div className="text-center space-y-4">
-            <h1 className="text-6xl md:text-7xl font-mono font-bold text-retro-amber">
+      <div className="relative z-10 container mx-auto px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center space-y-4 mb-8">
+            <h1 className="text-5xl md:text-6xl font-mono font-bold text-retro-amber">
               VibeCode
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-mono">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-mono">
               The collaborative coding environment where teams vibe together
             </p>
           </div>
 
           {/* Two Column Layout */}
-          <div className="grid md:grid-cols-2 gap-8 items-start">
+          <div className="grid md:grid-cols-2 gap-6 items-center mt-12">
             {/* Left: Image */}
-            <div className="flex justify-center md:mt-8">
+            <div className="flex justify-center">
               <img 
                 src={homerImage} 
                 alt="Homer Simpson" 
-                className="w-full max-w-md object-contain scale-x-[-1]"
+                className="w-full max-w-xs object-contain scale-x-[-1]"
               />
             </div>
 
