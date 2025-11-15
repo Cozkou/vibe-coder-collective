@@ -2,7 +2,7 @@ import WorkspaceSidebar from "@/components/WorkspaceSidebar";
 import SandboxPreview from "@/components/SandboxPreview";
 import ChatBot from "@/components/ChatBot";
 import { Button } from "@/components/ui/button";
-import { Home, ExternalLink, Focus, Bell } from "lucide-react";
+import { Home, Focus, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
@@ -14,6 +14,7 @@ import {
 const Workspace = () => {
   const navigate = useNavigate();
   const [isFocusMode, setIsFocusMode] = useState(false);
+  const [viewMode, setViewMode] = useState<"preview" | "code">("preview");
 
   const handleOpenPreview = () => {
     window.open(window.location.origin, "_blank");
@@ -39,15 +40,24 @@ const Workspace = () => {
           </div>
           
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleOpenPreview}
-              className="h-8 gap-2 font-mono text-xs"
-            >
-              <ExternalLink className="w-3 h-3" />
-              Preview
-            </Button>
+            <div className="flex items-center border border-border rounded overflow-hidden">
+              <Button
+                variant={viewMode === "code" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("code")}
+                className="h-8 rounded-none font-mono text-xs"
+              >
+                Code
+              </Button>
+              <Button
+                variant={viewMode === "preview" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("preview")}
+                className="h-8 rounded-none font-mono text-xs"
+              >
+                Preview
+              </Button>
+            </div>
             <Button
               variant={isFocusMode ? "default" : "ghost"}
               size="sm"
@@ -81,7 +91,7 @@ const Workspace = () => {
         <ResizablePanelGroup direction="horizontal" className={`flex-1 ${isFocusMode ? 'relative z-20' : ''}`}>
           {/* Center - Sandbox Preview */}
           <ResizablePanel defaultSize={70} minSize={30}>
-            <SandboxPreview />
+            <SandboxPreview viewMode={viewMode} />
           </ResizablePanel>
           
           <ResizableHandle withHandle />
