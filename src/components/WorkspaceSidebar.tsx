@@ -26,14 +26,14 @@ const WorkspaceSidebar = () => {
   return (
     <div
       className={cn(
-        "h-full bg-background/50 border-r border-border/50 transition-all duration-300 flex",
+        "h-full bg-background border-r border-border transition-all duration-300 flex",
         isExpanded ? "w-72" : "w-16"
       )}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
       {/* Icon Navigation */}
-      <div className="w-16 flex flex-col gap-2 p-2 border-r border-border/30">
+      <div className="w-16 flex flex-col gap-1 p-2 border-r border-border">
         {items.map((item) => {
           const Icon = item.icon;
           return (
@@ -41,10 +41,10 @@ const WorkspaceSidebar = () => {
               key={item.value}
               onClick={() => handleTabChange(item.value)}
               className={cn(
-                "w-12 h-12 rounded-lg flex items-center justify-center transition-colors",
+                "w-12 h-12 rounded flex items-center justify-center transition-colors",
                 activeTab === item.value
-                  ? "bg-cosmic-purple/20 text-cosmic-purple"
-                  : "hover:bg-accent/50 text-muted-foreground"
+                  ? "bg-retro-amber/20 text-retro-amber border border-retro-amber/30"
+                  : "hover:bg-accent/10 text-muted-foreground"
               )}
               title={item.title}
             >

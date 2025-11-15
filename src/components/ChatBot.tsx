@@ -24,32 +24,32 @@ const ChatBot = () => {
   };
 
   return (
-    <Card className="h-full bg-background/50 border-border/50 flex flex-col">
-      <div className="p-4 border-b border-border/50">
-        <h3 className="text-sm font-semibold">AI ASSISTANT</h3>
+    <Card className="h-full bg-background border-border flex flex-col">
+      <div className="px-3 py-2 border-b border-border">
+        <h3 className="text-xs font-mono font-semibold text-retro-amber">AI ASSISTANT</h3>
       </div>
       
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-4">
+      <ScrollArea className="flex-1 p-2">
+        <div className="space-y-2">
           {messages.map((msg) => (
-            <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : ""}`}>
+            <div key={msg.id} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : ""}`}>
               {msg.role === "assistant" && (
-                <Avatar className="w-8 h-8">
-                  <AvatarFallback className="bg-gradient-to-r from-cosmic-purple to-cosmic-cyan text-white">
+                <Avatar className="w-6 h-6 shrink-0">
+                  <AvatarFallback className="bg-retro-green/20 text-retro-green text-xs font-mono">
                     AI
                   </AvatarFallback>
                 </Avatar>
               )}
-              <div className={`max-w-[80%] p-3 rounded-lg ${
+              <div className={`max-w-[85%] px-2 py-1.5 rounded text-xs ${
                 msg.role === "user" 
-                  ? "bg-cosmic-purple/20 ml-auto" 
-                  : "bg-background border border-border/50"
+                  ? "bg-muted ml-auto" 
+                  : "bg-card border border-border"
               }`}>
-                <p className="text-sm">{msg.content}</p>
+                <p className="text-xs leading-relaxed">{msg.content}</p>
               </div>
               {msg.role === "user" && (
-                <Avatar className="w-8 h-8">
-                  <AvatarFallback className="bg-cosmic-cyan/20">U</AvatarFallback>
+                <Avatar className="w-6 h-6 shrink-0">
+                  <AvatarFallback className="bg-retro-amber/20 text-retro-amber text-xs font-mono">U</AvatarFallback>
                 </Avatar>
               )}
             </div>
@@ -57,17 +57,17 @@ const ChatBot = () => {
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t border-border/50">
-        <div className="flex gap-2">
+      <div className="p-2 border-t border-border">
+        <div className="flex gap-1">
           <Input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Ask me anything..."
-            className="bg-background/50 border-border/50"
+            placeholder="Ask..."
+            className="bg-background border-border text-xs h-8"
           />
-          <Button onClick={handleSend} size="icon">
-            <Send className="w-4 h-4" />
+          <Button onClick={handleSend} size="icon" className="h-8 w-8 shrink-0">
+            <Send className="w-3 h-3" />
           </Button>
         </div>
       </div>

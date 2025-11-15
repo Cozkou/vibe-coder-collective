@@ -8,50 +8,40 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 8% 6%;
-    --foreground: 240 6% 90%;
+    --background: 0 0% 8%;
+    --foreground: 40 20% 85%;
 
-    --card: 240 8% 8%;
-    --card-foreground: 240 6% 90%;
+    --card: 0 0% 10%;
+    --card-foreground: 40 20% 85%;
 
-    --popover: 240 8% 8%;
-    --popover-foreground: 240 6% 90%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 40 20% 85%;
 
-    --primary: 263 70% 65%;
-    --primary-foreground: 240 8% 6%;
+    --primary: 45 100% 55%;
+    --primary-foreground: 0 0% 8%;
 
-    --secondary: 193 82% 65%;
-    --secondary-foreground: 240 8% 6%;
+    --secondary: 120 100% 40%;
+    --secondary-foreground: 0 0% 8%;
 
-    --muted: 240 8% 12%;
-    --muted-foreground: 240 5% 65%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 40 10% 55%;
 
-    --accent: 280 65% 60%;
-    --accent-foreground: 240 6% 90%;
+    --accent: 45 100% 55%;
+    --accent-foreground: 0 0% 8%;
 
     --destructive: 0 62.8% 50.6%;
-    --destructive-foreground: 240 6% 90%;
+    --destructive-foreground: 40 20% 85%;
 
-    --border: 240 8% 15%;
-    --input: 240 8% 15%;
-    --ring: 263 70% 65%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 45 100% 55%;
 
-    --radius: 0.75rem;
+    --radius: 0.25rem;
 
-    /* Custom cosmic colors */
-    --cosmic-purple: 263 70% 65%;
-    --cosmic-cyan: 193 82% 65%;
-    --cosmic-indigo: 243 75% 59%;
-    --deep-space: 240 8% 6%;
-    --nebula-glow: 280 65% 60%;
-
-    /* Gradients */
-    --gradient-cosmic: linear-gradient(135deg, hsl(263 70% 65% / 0.3), hsl(193 82% 65% / 0.3));
-    --gradient-hero: linear-gradient(180deg, hsl(240 8% 6%), hsl(243 75% 10%));
-    
-    /* Glows */
-    --glow-primary: 0 0 40px hsl(263 70% 65% / 0.4);
-    --glow-secondary: 0 0 40px hsl(193 82% 65% / 0.3);
+    /* Retro terminal colors */
+    --retro-amber: 45 100% 55%;
+    --retro-green: 120 100% 40%;
+    --retro-orange: 30 100% 50%;
     
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

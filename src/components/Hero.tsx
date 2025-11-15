@@ -67,40 +67,31 @@ const Hero = () => {
   ];
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
-      {/* Ambient background effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cosmic-purple/20 rounded-full blur-[100px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cosmic-cyan/20 rounded-full blur-[100px] animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cosmic-indigo/10 rounded-full blur-[120px]" />
-      </div>
-
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Hero Content */}
       <div className="relative z-10 container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-4">
-            <h1 className="text-6xl md:text-7xl font-bold">
-              <span className="bg-gradient-to-r from-cosmic-purple via-cosmic-indigo to-cosmic-cyan bg-clip-text text-transparent">
-                VibeCode
-              </span>
+            <h1 className="text-6xl md:text-7xl font-mono font-bold text-retro-amber">
+              VibeCode
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-mono">
               The collaborative coding environment where teams vibe together
             </p>
           </div>
 
           {/* Prompt Input */}
-          <Card className="p-6 bg-background/50 backdrop-blur-sm border-border/50">
+          <Card className="p-6 bg-card border-border">
             <div className="space-y-4">
               <Textarea
                 placeholder="Describe what you want to build... (e.g., Create a modern dashboard with user authentication)"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[120px] bg-background/50 border-border/50 resize-none"
+                className="min-h-[120px] bg-background border-border resize-none font-mono text-sm"
               />
               <Button 
                 size="lg"
-                className="w-full bg-gradient-to-r from-cosmic-purple to-cosmic-cyan hover:opacity-90 text-white"
+                className="w-full bg-retro-amber text-background hover:bg-retro-amber/90 font-mono"
                 onClick={handleSubmit}
                 disabled={isLoading}
               >
@@ -114,19 +105,18 @@ const Hero = () => {
             {features.map((feature, i) => (
               <div
                 key={i}
-                className="p-6 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/50 hover:bg-card/50 transition-all"
+                className="p-6 rounded bg-card border border-border hover:border-retro-amber/50 transition-all"
               >
-                <div className="w-12 h-12 rounded-full bg-gradient-cosmic flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-foreground" />
+                <div className="w-12 h-12 rounded bg-retro-amber/10 flex items-center justify-center mb-4 border border-retro-amber/20">
+                  <feature.icon className="w-6 h-6 text-retro-amber" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
+                <h3 className="text-lg font-semibold mb-2 font-mono">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground font-mono">{feature.description}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
-
     </div>
   );
 };

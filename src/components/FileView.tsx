@@ -16,16 +16,16 @@ const mockFiles = [
 const FileView = () => {
   return (
     <ScrollArea className="h-full">
-      <div className="p-4 space-y-2">
-        <h3 className="text-sm font-semibold text-muted-foreground mb-4">PROJECT FILES</h3>
+      <div className="p-3 space-y-1">
+        <h3 className="text-xs font-mono font-semibold text-retro-amber mb-3">PROJECT FILES</h3>
         {mockFiles.map((item, i) => (
-          <div key={i} className="flex items-center gap-2 p-2 rounded hover:bg-accent/50 cursor-pointer transition-colors">
+          <div key={i} className="flex items-center gap-2 p-2 rounded hover:bg-accent/10 cursor-pointer transition-colors border border-transparent hover:border-border">
             {item.type === "folder" ? (
-              <Folder className="w-4 h-4 text-cosmic-cyan" />
+              <Folder className="w-4 h-4 text-retro-green" />
             ) : (
-              <FileCode className="w-4 h-4 text-cosmic-purple" />
+              <FileCode className="w-4 h-4 text-retro-amber" />
             )}
-            <span className="text-sm">{item.name}</span>
+            <span className="text-xs font-mono">{item.name}</span>
           </div>
         ))}
       </div>
