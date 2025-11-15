@@ -81,7 +81,7 @@ const Hero = () => {
       
       {/* Hero Content */}
       <div className="relative z-10 container mx-auto px-4">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center space-y-4 mb-8">
             <h1 className="text-5xl md:text-6xl font-mono font-bold text-retro-amber">
               HomerIDE
@@ -91,19 +91,19 @@ const Hero = () => {
             </p>
           </div>
 
-          {/* Two Column Layout */}
-          <div className="grid md:grid-cols-2 gap-6 items-center mt-12">
-            {/* Left: Image */}
-            <div className="flex justify-center">
+          {/* Centered Layout with Image and Form */}
+          <div className="relative flex items-center justify-center">
+            {/* Homer Image - Background */}
+            <div className="absolute">
               <img 
                 src={homerImage} 
                 alt="Homer Simpson" 
-                className="w-full max-w-xs object-contain scale-x-[-1]"
+                className="w-96 object-contain scale-x-[-1] opacity-60"
               />
             </div>
 
-            {/* Right: Prompt Input */}
-            <Card className="p-6 bg-card border-border">
+            {/* Prompt Input - Foreground */}
+            <Card className="relative z-10 p-6 bg-card/95 backdrop-blur-sm border-border w-full max-w-2xl mt-32">
               <div className="space-y-4">
                 <Textarea
                   placeholder="Describe what you want to build..."
