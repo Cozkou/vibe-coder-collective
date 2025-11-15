@@ -11,7 +11,7 @@ const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
   const [displayedText, setDisplayedText] = useState("");
   const [showButton, setShowButton] = useState(false);
   
-  const fullText = "Ah, now we have the first mock of the website. Now let's pick our first feature for our to work on!";
+  const fullText = "Ah, now we have the first mock of the website. Now let's pick our first feature for us to work on!";
 
   useEffect(() => {
     // Check if tutorial has been completed for this session
