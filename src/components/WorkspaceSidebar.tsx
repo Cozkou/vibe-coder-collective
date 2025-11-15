@@ -15,7 +15,7 @@ interface WorkspaceSidebarProps {
 }
 
 const WorkspaceSidebar = ({ onFeatureClick }: WorkspaceSidebarProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
