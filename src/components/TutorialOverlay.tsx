@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import homerImage from "@/assets/homer-tutorial.png";
-import homerImage2 from "@/assets/homer-tutorial-2.png";
+import homerImage2 from "@/assets/homer.png";
 
 interface TutorialOverlayProps {
   sessionId?: string;
@@ -84,10 +84,10 @@ const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) 
           <div className="flex-1 h-1 bg-border rounded-full overflow-hidden">
             <div 
               className="h-full bg-retro-amber transition-all duration-300" 
-              style={{ width: `${(currentStep / 3) * 100}%` }}
+              style={{ width: `${(currentStep / 2) * 100}%` }}
             />
           </div>
-          <span className="text-xs font-mono text-muted-foreground">Step {currentStep} of 3</span>
+          <span className="text-xs font-mono text-muted-foreground">Step {currentStep} of 2</span>
         </div>
         
         {/* Bubble tail pointing to Homer */}
