@@ -64,8 +64,8 @@ const Hero = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
-      {/* Realistic Sun */}
-      <div className="absolute -top-[300px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] pointer-events-none">
+      {/* Realistic Sun - Bottom Half */}
+      <div className="absolute -bottom-[300px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] pointer-events-none">
         {/* Outer Glow */}
         <div className="absolute inset-0 rounded-full blur-3xl bg-retro-orange/30 scale-110" />
         
@@ -78,12 +78,25 @@ const Hero = () => {
               style={{
                 width: '3px',
                 height: '200px',
-                background: 'linear-gradient(to top, hsl(var(--retro-amber)), transparent)',
-                transform: `translate(-50%, -50%) rotate(${i * 22.5}deg) translateY(-250px)`,
+                background: 'linear-gradient(to bottom, hsl(var(--retro-amber)), transparent)',
+                transform: `translate(-50%, -50%) rotate(${i * 22.5}deg) translateY(250px)`,
               }}
             />
           ))}
         </div>
+        
+        {/* Solar Flares */}
+        {[...Array(5)].map((_, i) => (
+          <div
+            key={`flare-${i}`}
+            className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-retro-amber/80 blur-sm"
+            style={{
+              left: `${30 + i * 10}%`,
+              animation: `solarFlare${i} ${4 + i}s ease-out infinite`,
+              animationDelay: `${i * 0.8}s`,
+            }}
+          />
+        ))}
         
         {/* Main Sun Body with Globe Effect */}
         <div className="absolute inset-0 rounded-full overflow-hidden shadow-[0_0_120px_40px_hsl(var(--retro-amber)/0.5)]">
@@ -113,7 +126,7 @@ const Hero = () => {
         </div>
         
         {/* Atmospheric glow */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-transparent via-retro-amber/20 to-retro-orange/40 blur-xl scale-105" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-retro-amber/20 to-retro-orange/40 blur-xl scale-105" />
       </div>
       
       <style>
@@ -121,6 +134,76 @@ const Hero = () => {
           @keyframes moveTexture {
             0% { transform: translateX(0); }
             100% { transform: translateX(80px); }
+          }
+          
+          @keyframes solarFlare0 {
+            0% { 
+              transform: translateY(0) scale(1); 
+              opacity: 0; 
+            }
+            10% { 
+              opacity: 0.8; 
+            }
+            100% { 
+              transform: translateY(-200px) scale(2); 
+              opacity: 0; 
+            }
+          }
+          
+          @keyframes solarFlare1 {
+            0% { 
+              transform: translateY(0) translateX(-20px) scale(1); 
+              opacity: 0; 
+            }
+            10% { 
+              opacity: 0.7; 
+            }
+            100% { 
+              transform: translateY(-180px) translateX(-40px) scale(1.8); 
+              opacity: 0; 
+            }
+          }
+          
+          @keyframes solarFlare2 {
+            0% { 
+              transform: translateY(0) translateX(20px) scale(1); 
+              opacity: 0; 
+            }
+            10% { 
+              opacity: 0.9; 
+            }
+            100% { 
+              transform: translateY(-220px) translateX(40px) scale(2.2); 
+              opacity: 0; 
+            }
+          }
+          
+          @keyframes solarFlare3 {
+            0% { 
+              transform: translateY(0) translateX(-30px) scale(1); 
+              opacity: 0; 
+            }
+            10% { 
+              opacity: 0.6; 
+            }
+            100% { 
+              transform: translateY(-190px) translateX(-50px) scale(1.6); 
+              opacity: 0; 
+            }
+          }
+          
+          @keyframes solarFlare4 {
+            0% { 
+              transform: translateY(0) translateX(30px) scale(1); 
+              opacity: 0; 
+            }
+            10% { 
+              opacity: 0.8; 
+            }
+            100% { 
+              transform: translateY(-210px) translateX(50px) scale(2); 
+              opacity: 0; 
+            }
           }
         `}
       </style>
