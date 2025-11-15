@@ -4,14 +4,19 @@ import homerImage from "@/assets/homer-tutorial.png";
 
 interface TutorialOverlayProps {
   sessionId?: string;
+  onFeatureClicked?: boolean;
 }
 
-const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
+const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
   const [showButton, setShowButton] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
   
-  const fullText = "Ah, now we have the first mock of the website. Now let's pick our first feature for us to work on!";
+  const tutorialSteps = [
+    "Ah, now we have the first mock of the website. Now let's pick our first feature for us to work on!",
+    "Now that you've added the first feature, feel free to type anything in the prompt to make any changes!"
+  ];
 
   useEffect(() => {
     // Check if tutorial has been completed for this session
@@ -25,8 +30,18 @@ const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
   }, [sessionId]);
 
   useEffect(() => {
+    // Advance to step 2 when feature is clicked
+    if (onFeatureClicked && currentStep === 1) {
+      setShowButton(false);
+      setDisplayedText("");
+      setCurrentStep(2);
+    }
+  }, [onFeatureClicked, currentStep]);
+
+  useEffect(() => {
     if (!isVisible) return;
     
+    const fullText = tutorialSteps[currentStep - 1];
     let currentIndex = 0;
     const typingInterval = setInterval(() => {
       if (currentIndex <= fullText.length) {
@@ -39,7 +54,7 @@ const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
     }, 30);
 
     return () => clearInterval(typingInterval);
-  }, [isVisible]);
+  }, [isVisible, currentStep]);
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -66,9 +81,12 @@ const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
         {/* Progress bar */}
         <div className="mb-3 flex items-center gap-2">
           <div className="flex-1 h-1 bg-border rounded-full overflow-hidden">
-            <div className="h-full bg-retro-amber w-1/3 transition-all duration-300" />
+            <div 
+              className="h-full bg-retro-amber transition-all duration-300" 
+              style={{ width: `${(currentStep / 3) * 100}%` }}
+            />
           </div>
-          <span className="text-xs font-mono text-muted-foreground">Step 1 of 3</span>
+          <span className="text-xs font-mono text-muted-foreground">Step {currentStep} of 3</span>
         </div>
         
         {/* Bubble tail pointing to Homer */}
