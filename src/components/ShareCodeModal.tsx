@@ -6,14 +6,13 @@ import { useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-interface TeamSetupModalProps {
+interface ShareCodeModalProps {
   open: boolean;
   onClose: () => void;
   sessionId: string;
 }
 
-const TeamSetupModal = ({ open, onClose, sessionId }: TeamSetupModalProps) => {
-  const [teamSize, setTeamSize] = useState("2");
+const ShareCodeModal = ({ open, onClose, sessionId }: ShareCodeModalProps) => {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
   
@@ -35,23 +34,11 @@ const TeamSetupModal = ({ open, onClose, sessionId }: TeamSetupModalProps) => {
       <DialogContent className="bg-card backdrop-blur-xl border border-border">
         <DialogHeader>
           <DialogTitle className="text-2xl font-mono text-retro-amber">
-            Setup Your Team
+            Share Your Workspace
           </DialogTitle>
         </DialogHeader>
         
         <div className="space-y-6 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="teamSize" className="font-mono text-sm">How many people are on your team?</Label>
-            <Input
-              id="teamSize"
-              type="number"
-              min="1"
-              value={teamSize}
-              onChange={(e) => setTeamSize(e.target.value)}
-              className="bg-background border-border font-mono"
-            />
-          </div>
-
           <div className="space-y-2">
             <Label className="font-mono text-sm">Share this code with your team</Label>
             <div className="flex gap-2">
@@ -78,7 +65,7 @@ const TeamSetupModal = ({ open, onClose, sessionId }: TeamSetupModalProps) => {
             onClick={onClose}
             className="w-full bg-retro-amber text-background hover:bg-retro-amber/90 font-mono"
           >
-            Start Collaborating
+            Done
           </Button>
         </div>
       </DialogContent>
@@ -86,4 +73,4 @@ const TeamSetupModal = ({ open, onClose, sessionId }: TeamSetupModalProps) => {
   );
 };
 
-export default TeamSetupModal;
+export default ShareCodeModal;

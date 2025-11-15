@@ -1,9 +1,10 @@
 import WorkspaceSidebar from "@/components/WorkspaceSidebar";
 import SandboxPreview from "@/components/SandboxPreview";
 import ChatBot from "@/components/ChatBot";
+import ShareCodeModal from "@/components/ShareCodeModal";
 import { Button } from "@/components/ui/button";
-import { Home, Focus, Bell } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Home, Focus, Bell, Share2 } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import {
   ResizableHandle,
@@ -13,8 +14,10 @@ import {
 
 const Workspace = () => {
   const navigate = useNavigate();
+  const { id: sessionId } = useParams();
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [viewMode, setViewMode] = useState<"preview" | "code">("preview");
+  const [shareModalOpen, setShareModalOpen] = useState(false);
 
   const handleOpenPreview = () => {
     window.open(window.location.origin, "_blank");
@@ -40,6 +43,15 @@ const Workspace = () => {
           </div>
           
           <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShareModalOpen(true)}
+              className="h-8 gap-2 font-mono text-xs"
+            >
+              <Share2 className="w-3 h-3" />
+              Share
+            </Button>
             <Button
               variant={isFocusMode ? "default" : "ghost"}
               size="sm"
@@ -84,6 +96,14 @@ const Workspace = () => {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
+
+      {sessionId && (
+        <ShareCodeModal
+          open={shareModalOpen}
+          onClose={() => setShareModalOpen(false)}
+          sessionId={sessionId}
+        />
+      )}
     </div>
   );
 };
