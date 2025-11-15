@@ -5,9 +5,10 @@ import FileView from "./FileView";
 interface SandboxPreviewProps {
   viewMode: "preview" | "code" | "document";
   onViewModeChange: (mode: "preview" | "code" | "document") => void;
+  sessionId: string;
 }
 
-const SandboxPreview = ({ viewMode, onViewModeChange }: SandboxPreviewProps) => {
+const SandboxPreview = ({ viewMode, onViewModeChange, sessionId }: SandboxPreviewProps) => {
   return (
     <Card className="h-full bg-background border-border flex flex-col">
       <div className="flex items-center justify-between px-3 py-2 border-b border-border">
@@ -35,7 +36,7 @@ const SandboxPreview = ({ viewMode, onViewModeChange }: SandboxPreviewProps) => 
           <div className="w-full h-full bg-black" />
         ) : (
           <div className="w-full h-full bg-background overflow-hidden">
-            <FileView />
+            <FileView sessionId={sessionId} />
           </div>
         )}
       </div>

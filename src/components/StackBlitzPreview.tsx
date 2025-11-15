@@ -53,14 +53,13 @@ const StackBlitzPreview = ({ sessionId, showEditor = false }: StackBlitzPreviewP
       },
       {
         openFile: 'src/App.tsx',
-        view: showEditor ? 'default' : 'preview', // 'preview' = preview only, 'default' = show editor
+        view: showEditor ? 'default' : 'preview',
         height: '100%',
-        hideNavigation: !showEditor, // Hide file tree in preview-only mode
-        hideDevTools: !showEditor, // Hide console/terminal in preview-only mode
+        hideNavigation: !showEditor,
+        hideDevTools: !showEditor,
         forceEmbedLayout: true,
-        hideExplorer: true, // Hide file explorer
-        hideFileTree: true, // Hide file tree
-        terminalHeight: 0, // No terminal
+        hideExplorer: true,
+        terminalHeight: 0,
       }
     ).then(vm => {
       vmRef.current = vm;
