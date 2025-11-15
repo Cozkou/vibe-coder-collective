@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { supabase } from "@/integrations/supabase/client";
 import { useParams } from "react-router-dom";
 
 interface DocumentViewProps {
@@ -8,7 +7,7 @@ interface DocumentViewProps {
 }
 
 const DocumentView = ({ onFeatureClick }: DocumentViewProps) => {
-  const { id: sessionId } = useParams();
+  const { sessionId } = useParams();
   const [hasAnimated, setHasAnimated] = useState(() => {
     return sessionStorage.getItem(`animated-${sessionId}`) === 'true';
   });
