@@ -35,15 +35,11 @@ const Workspace = () => {
       </header>
 
       {/* Main workspace */}
-      <div className="h-[calc(100vh-57px)] overflow-hidden">
-        <ResizablePanelGroup direction="horizontal">
-          {/* Left Sidebar */}
-          <ResizablePanel defaultSize={5} minSize={5} maxSize={20}>
-            <WorkspaceSidebar />
-          </ResizablePanel>
-          
-          <ResizableHandle withHandle />
-          
+      <div className="h-[calc(100vh-57px)] overflow-hidden flex">
+        {/* Left Sidebar */}
+        <WorkspaceSidebar />
+
+        <ResizablePanelGroup direction="horizontal" className="flex-1">
           {/* Center - Sandbox Preview */}
           <ResizablePanel defaultSize={70} minSize={30}>
             <SandboxPreview />
@@ -52,7 +48,7 @@ const Workspace = () => {
           <ResizableHandle withHandle />
           
           {/* Right - Chatbot */}
-          <ResizablePanel defaultSize={25} minSize={15} maxSize={40}>
+          <ResizablePanel defaultSize={30} minSize={15} maxSize={40}>
             <ChatBot />
           </ResizablePanel>
         </ResizablePanelGroup>
