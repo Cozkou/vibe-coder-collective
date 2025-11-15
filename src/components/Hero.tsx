@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import TeamSetupModal from "./TeamSetupModal";
+import homerImage from "@/assets/homer.png";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ const Hero = () => {
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Hero Content */}
       <div className="relative z-10 container mx-auto px-4 py-20">
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-6xl mx-auto space-y-8">
           <div className="text-center space-y-4">
             <h1 className="text-6xl md:text-7xl font-mono font-bold text-retro-amber">
               VibeCode
@@ -76,44 +77,56 @@ const Hero = () => {
             </p>
           </div>
 
-          {/* Prompt Input */}
-          <Card className="p-4 bg-card border-border">
-            <div className="space-y-3">
-              <Textarea
-                placeholder="Describe what you want to build... (e.g., Create a modern dashboard with user authentication)"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[80px] bg-background border-border resize-none font-mono text-sm"
+          {/* Two Column Layout */}
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Left: Image */}
+            <div className="flex justify-center">
+              <img 
+                src={homerImage} 
+                alt="Homer Simpson" 
+                className="w-full max-w-md object-contain"
               />
-              <div className="flex items-center justify-between">
-                <div className="flex gap-2">
+            </div>
+
+            {/* Right: Prompt Input */}
+            <Card className="p-4 bg-card border-border">
+              <div className="space-y-3">
+                <Textarea
+                  placeholder="Describe what you want to build..."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  className="min-h-[60px] bg-background border-border resize-none font-mono text-sm"
+                />
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                    >
+                      <Paperclip className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                    >
+                      <Mic className="w-4 h-4" />
+                    </Button>
+                  </div>
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                    size="sm"
+                    className="bg-retro-amber text-background hover:bg-retro-amber/90 font-mono h-9 px-4 gap-2"
+                    onClick={handleSubmit}
+                    disabled={isLoading}
                   >
-                    <Paperclip className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-9 w-9 text-muted-foreground hover:text-foreground"
-                  >
-                    <Mic className="w-4 h-4" />
+                    {isLoading ? "Creating..." : "Start Building"}
+                    <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>
-                <Button
-                  size="sm"
-                  className="bg-retro-amber text-background hover:bg-retro-amber/90 font-mono h-9 px-4 gap-2"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Creating..." : "Start Building"}
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </div>
         </div>
       </div>
 
