@@ -59,7 +59,6 @@ const Workspace = () => {
           
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 px-3 py-1 bg-muted/50 rounded border border-border">
-              <span className="text-xs font-mono text-muted-foreground">Code:</span>
               <span className="text-xs font-mono font-semibold">{sessionId}</span>
               <Button
                 variant="ghost"
