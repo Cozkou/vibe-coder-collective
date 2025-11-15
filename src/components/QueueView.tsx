@@ -1,39 +1,21 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Clock } from "lucide-react";
+import { Clock, Users } from "lucide-react";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { useFirestorePrompts } from "@/hooks/useFirestorePrompts";
-
-interface User {
-  id: string;
-  color: string;
-  initials: string;
-}
+import { useUserPresence } from "@/hooks/useUserPresence";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const QueueView = () => {
   const { sessionId } = useParams();
   const { prompts } = useFirestorePrompts(sessionId);
-  const [users, setUsers] = useState<Map<string, User>>(new Map());
-
-  useEffect(() => {
-    // Generate user colors and initials
-    const userMap = new Map<string, User>();
-    const colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-purple-500", "bg-pink-500"];
-    
-    prompts.forEach((prompt, index) => {
-      if (prompt.userId && !userMap.has(prompt.userId)) {
-        userMap.set(prompt.userId, {
-          id: prompt.userId,
-          color: colors[userMap.size % colors.length],
-          initials: `U${userMap.size + 1}`,
-        });
-      }
-    });
-    
-    setUsers(userMap);
-  }, [prompts]);
+  const { users: activeUsers } = useUserPresence(sessionId);
 
   const getTimeAgo = (timestamp: any) => {
     const now = new Date();
@@ -49,17 +31,43 @@ const QueueView = () => {
   return (
     <ScrollArea className="h-full">
       <div className="p-3 space-y-3">
+        {/* Active Users Header */}
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-mono font-semibold text-retro-amber">PROMPT QUEUE</h3>
-          <div className="flex -space-x-2">
-            {Array.from(users.values()).map((user) => (
-              <Avatar key={user.id} className="w-6 h-6 border-2 border-background">
-                <AvatarFallback className={`${user.color} text-white text-[10px] font-mono`}>
-                  {user.initials}
-                </AvatarFallback>
-              </Avatar>
-            ))}
+          <div className="flex items-center gap-2">
+            <h3 className="text-xs font-mono font-semibold text-retro-amber">PROMPT QUEUE</h3>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Users className="w-3 h-3" />
+              <span>{activeUsers.length}</span>
+            </div>
           </div>
+          <TooltipProvider>
+            <div className="flex -space-x-2">
+              {activeUsers.map((user) => (
+                <Tooltip key={user.id}>
+                  <TooltipTrigger>
+                    <Avatar className="w-6 h-6 border-2 border-background">
+                      <AvatarFallback 
+                        style={{ backgroundColor: user.color }}
+                        className="text-white text-[10px] font-mono"
+                      >
+                        {user.userName.split(' ').map(n => n[0]).join('').toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <div className="text-xs space-y-1">
+                      <p className="font-semibold">{user.userName}</p>
+                      {user.currentPrompt && (
+                        <p className="text-muted-foreground">
+                          Working on: {user.currentPrompt.substring(0, 30)}...
+                        </p>
+                      )}
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+          </TooltipProvider>
         </div>
         
         {prompts.length === 0 ? (
@@ -68,17 +76,31 @@ const QueueView = () => {
           </div>
         ) : (
           prompts.map((prompt) => {
-            const user = prompt.userId ? users.get(prompt.userId) : null;
+            // Find the user who sent this prompt
+            const user = activeUsers.find(u => u.id === prompt.userId);
+            
             return (
               <div key={prompt.id} className="p-2 rounded bg-background border border-border space-y-1.5">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-start gap-2 flex-1">
                     {user && (
-                      <Avatar className="w-5 h-5 shrink-0">
-                        <AvatarFallback className={`${user.color} text-white text-[8px] font-mono`}>
-                          {user.initials}
-                        </AvatarFallback>
-                      </Avatar>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Avatar className="w-5 h-5 shrink-0">
+                              <AvatarFallback 
+                                style={{ backgroundColor: user.color }}
+                                className="text-white text-[8px] font-mono"
+                              >
+                                {user.userName.split(' ').map(n => n[0]).join('').toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="text-xs">{user.userName}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     )}
                     <p className="text-xs font-mono flex-1">{prompt.content}</p>
                   </div>
@@ -89,7 +111,7 @@ const QueueView = () => {
                     {prompt.status}
                   </Badge>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground font-mono pl-7">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground font-mono" style={{ paddingLeft: user ? '1.75rem' : '0' }}>
                   <Clock className="w-3 h-3" />
                   <span>{getTimeAgo(prompt.createdAt)}</span>
                 </div>
