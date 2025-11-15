@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import TeamSetupModal from "./TeamSetupModal";
+import sunTexture from "@/assets/sun-texture.jpg";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -65,75 +66,68 @@ const Hero = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Realistic Sun - Bottom Half */}
-      <div className="absolute -bottom-[300px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] pointer-events-none">
+      <div className="absolute -bottom-[400px] left-1/2 -translate-x-1/2 w-[1400px] h-[800px] pointer-events-none">
         {/* Outer Glow */}
-        <div className="absolute inset-0 rounded-full blur-3xl bg-retro-orange/30 scale-110" />
+        <div className="absolute inset-0 rounded-full blur-[100px] bg-retro-orange/40 scale-110" />
         
         {/* Sun Rays */}
         <div className="absolute inset-0">
-          {[...Array(16)].map((_, i) => (
+          {[...Array(20)].map((_, i) => (
             <div
               key={i}
-              className="absolute top-1/2 left-1/2 origin-bottom opacity-40"
+              className="absolute top-1/2 left-1/2 origin-bottom opacity-30"
               style={{
-                width: '3px',
-                height: '200px',
+                width: '4px',
+                height: '300px',
                 background: 'linear-gradient(to bottom, hsl(var(--retro-amber)), transparent)',
-                transform: `translate(-50%, -50%) rotate(${i * 22.5}deg) translateY(250px)`,
+                transform: `translate(-50%, -50%) rotate(${i * 18}deg) translateY(350px)`,
               }}
             />
           ))}
         </div>
         
         {/* Solar Flares */}
-        {[...Array(5)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <div
             key={`flare-${i}`}
-            className="absolute top-0 left-1/2 w-2 h-2 rounded-full bg-retro-amber/80 blur-sm"
+            className="absolute top-0 left-1/2 w-3 h-3 rounded-full bg-retro-amber/90 blur-sm"
             style={{
-              left: `${30 + i * 10}%`,
-              animation: `solarFlare${i} ${4 + i}s ease-out infinite`,
-              animationDelay: `${i * 0.8}s`,
+              left: `${20 + i * 8}%`,
+              animation: `solarFlare${i % 5} ${4 + (i % 3)}s ease-out infinite`,
+              animationDelay: `${i * 0.6}s`,
             }}
           />
         ))}
         
-        {/* Main Sun Body with Globe Effect */}
-        <div className="absolute inset-0 rounded-full overflow-hidden shadow-[0_0_120px_40px_hsl(var(--retro-amber)/0.5)]">
-          {/* Core gradient */}
-          <div className="absolute inset-0 rounded-full bg-gradient-radial from-[hsl(45,100%,65%)] via-[hsl(40,100%,55%)] to-[hsl(35,100%,45%)]" />
-          
-          {/* Rotating texture overlay for globe effect */}
+        {/* Main Sun Body with Real Texture */}
+        <div className="absolute inset-0 rounded-full overflow-hidden shadow-[0_0_150px_60px_hsl(var(--retro-amber)/0.6)]">
+          {/* Real sun texture */}
           <div 
-            className="absolute inset-0 rounded-full opacity-30"
+            className="absolute inset-0 rounded-full"
             style={{
-              background: 'repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.1) 40px, rgba(0,0,0,0.1) 80px)',
-              animation: 'moveTexture 30s linear infinite',
+              backgroundImage: `url(${sunTexture})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              animation: 'moveSunTexture 60s linear infinite',
             }}
           />
           
-          {/* Light spots for dimension */}
-          <div className="absolute top-[20%] left-[30%] w-32 h-32 rounded-full bg-[hsl(45,100%,75%)] blur-3xl opacity-60" />
-          <div className="absolute top-[40%] right-[25%] w-24 h-24 rounded-full bg-[hsl(45,100%,70%)] blur-2xl opacity-40" />
+          {/* Overlay for blending */}
+          <div className="absolute inset-0 rounded-full bg-gradient-radial from-[hsl(45,100%,70%)]/30 via-transparent to-[hsl(35,100%,45%)]/20 mix-blend-overlay" />
           
-          {/* Surface detail overlay */}
-          <div 
-            className="absolute inset-0 rounded-full opacity-20"
-            style={{
-              background: 'radial-gradient(circle at 35% 35%, transparent 30%, rgba(0,0,0,0.2) 100%)',
-            }}
-          />
+          {/* Corona effect */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-retro-amber/10 to-retro-orange/30 blur-2xl" />
         </div>
         
         {/* Atmospheric glow */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-retro-amber/20 to-retro-orange/40 blur-xl scale-105" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-retro-amber/15 to-retro-orange/30 blur-3xl scale-105" />
       </div>
       
       <style>
         {`
-          @keyframes moveTexture {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(80px); }
+          @keyframes moveSunTexture {
+            0% { transform: translateX(0) scale(1.1); }
+            100% { transform: translateX(-100px) scale(1.1); }
           }
           
           @keyframes solarFlare0 {
@@ -145,63 +139,63 @@ const Hero = () => {
               opacity: 0.8; 
             }
             100% { 
-              transform: translateY(-200px) scale(2); 
+              transform: translateY(-250px) scale(2.5); 
               opacity: 0; 
             }
           }
           
           @keyframes solarFlare1 {
             0% { 
-              transform: translateY(0) translateX(-20px) scale(1); 
+              transform: translateY(0) translateX(-30px) scale(1); 
               opacity: 0; 
             }
             10% { 
               opacity: 0.7; 
             }
             100% { 
-              transform: translateY(-180px) translateX(-40px) scale(1.8); 
+              transform: translateY(-220px) translateX(-60px) scale(2); 
               opacity: 0; 
             }
           }
           
           @keyframes solarFlare2 {
             0% { 
-              transform: translateY(0) translateX(20px) scale(1); 
+              transform: translateY(0) translateX(30px) scale(1); 
               opacity: 0; 
             }
             10% { 
               opacity: 0.9; 
             }
             100% { 
-              transform: translateY(-220px) translateX(40px) scale(2.2); 
+              transform: translateY(-270px) translateX(60px) scale(2.8); 
               opacity: 0; 
             }
           }
           
           @keyframes solarFlare3 {
             0% { 
-              transform: translateY(0) translateX(-30px) scale(1); 
+              transform: translateY(0) translateX(-40px) scale(1); 
               opacity: 0; 
             }
             10% { 
               opacity: 0.6; 
             }
             100% { 
-              transform: translateY(-190px) translateX(-50px) scale(1.6); 
+              transform: translateY(-240px) translateX(-70px) scale(2.2); 
               opacity: 0; 
             }
           }
           
           @keyframes solarFlare4 {
             0% { 
-              transform: translateY(0) translateX(30px) scale(1); 
+              transform: translateY(0) translateX(40px) scale(1); 
               opacity: 0; 
             }
             10% { 
               opacity: 0.8; 
             }
             100% { 
-              transform: translateY(-210px) translateX(50px) scale(2); 
+              transform: translateY(-260px) translateX(70px) scale(2.6); 
               opacity: 0; 
             }
           }
