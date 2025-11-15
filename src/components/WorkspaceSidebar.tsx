@@ -1,15 +1,13 @@
-import { ListTodo, Layers, FileText } from "lucide-react";
+import { Layers, FileText } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import QueueView from "./QueueView";
-import TasksView from "./TasksView";
 import DocumentView from "./DocumentView";
 
 const items = [
   { title: "Document", value: "document", icon: FileText },
   { title: "Queue", value: "queue", icon: Layers },
-  { title: "Tasks", value: "tasks", icon: ListTodo },
 ];
 
 interface WorkspaceSidebarProps {
@@ -64,7 +62,6 @@ const WorkspaceSidebar = ({ onFeatureClick }: WorkspaceSidebarProps) => {
         <div className="flex-1 overflow-hidden">
           {activeTab === "document" && <DocumentView onFeatureClick={onFeatureClick} />}
           {activeTab === "queue" && <QueueView />}
-          {activeTab === "tasks" && <TasksView />}
         </div>
       )}
     </div>
