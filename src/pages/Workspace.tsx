@@ -9,8 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Home, Bell, Copy } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useAIAgent } from "@/hooks/useAIAgent";
 
 const Workspace = () => {
   const navigate = useNavigate();
@@ -20,11 +21,29 @@ const Workspace = () => {
   const [viewMode, setViewMode] = useState<"preview" | "code">("preview");
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
   const [featureClicked, setFeatureClicked] = useState(false);
+  const [isSwitchingTabs, setIsSwitchingTabs] = useState(false);
   const { toast } = useToast();
 
-  // Debug logging
-  console.log('Workspace loaded. Session ID from URL:', sessionId);
-  console.log('Current URL:', window.location.href);
+  // Initialize AI Agent (watches for new prompts automatically)
+  const { isProcessing, hasApiKey } = useAIAgent(sessionId);
+
+  // Handle tab switching with loading state
+  const handleViewModeChange = (mode: "preview" | "code") => {
+    if (mode === viewMode) return;
+    
+    setIsSwitchingTabs(true);
+    setTimeout(() => {
+      setViewMode(mode);
+      setIsSwitchingTabs(false);
+    }, 200); // Brief loading state for smooth transition
+  };
+
+  // Debug logging (only once on mount)
+  useEffect(() => {
+    console.log('Workspace loaded. Session ID from URL:', sessionId);
+    console.log('Current URL:', window.location.href);
+    console.log('AI Agent Status:', { isProcessing, hasApiKey });
+  }, [sessionId]); // Only log when sessionId changes, not on every render
 
   const handleCopyCode = () => {
     if (sessionId) {
@@ -97,7 +116,8 @@ const Workspace = () => {
                   <Button
                     variant={viewMode === "code" ? "default" : "ghost"}
                     size="sm"
-                    onClick={() => setViewMode("code")}
+                    onClick={() => handleViewModeChange("code")}
+                    disabled={isSwitchingTabs}
                     className="h-6 rounded-none font-mono text-xs px-3"
                   >
                     Code
@@ -105,7 +125,8 @@ const Workspace = () => {
                   <Button
                     variant={viewMode === "preview" ? "default" : "ghost"}
                     size="sm"
-                    onClick={() => setViewMode("preview")}
+                    onClick={() => handleViewModeChange("preview")}
+                    disabled={isSwitchingTabs}
                     className="h-6 rounded-none font-mono text-xs px-3"
                   >
                     Preview
@@ -114,7 +135,15 @@ const Workspace = () => {
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-hidden">
+              <div className="flex-1 overflow-hidden relative">
+                {isSwitchingTabs ? (
+                  <div className="absolute inset-0 flex items-center justify-center bg-background z-10">
+                    <div className="text-center space-y-3">
+                      <div className="w-8 h-8 border-4 border-retro-amber/30 border-t-retro-amber rounded-full animate-spin mx-auto"></div>
+                      <p className="text-xs text-muted-foreground font-mono">Loading...</p>
+                    </div>
+                  </div>
+                ) : null}
                 {viewMode === "preview" ? (
                   <StackBlitzPreview sessionId={sessionId} showEditor={false} />
                 ) : (

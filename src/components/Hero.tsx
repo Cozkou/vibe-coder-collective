@@ -48,17 +48,29 @@ const Hero = () => {
         currentFeature: null
       });
 
-      // Seed initial React files
-      console.log('About to seed files for session:', newSessionId);
-      await seedReactFiles(newSessionId);
-      console.log('Files seeded successfully!');
+      // Seed minimal starter files (loading state)
+      console.log('Seeding minimal starter files for session:', newSessionId);
+      await seedMinimalFiles(newSessionId);
+      console.log('Starter files seeded!');
+
+      // Add initial prompt to prompts collection for AI agent to process
+      console.log('Adding initial prompt to queue for AI generation');
+      const promptsRef = collection(db, 'sessions', newSessionId, 'prompts');
+      await addDoc(promptsRef, {
+        content: `Create a React application based on this description: ${prompt}`,
+        status: 'pending',
+        userId: anonymousId,
+        createdAt: Timestamp.now(),
+        completedAt: null
+      });
+      console.log('Initial prompt added - AI agent will generate the code!');
 
       setSessionId(newSessionId);
       setModalOpen(true);
       
       toast({
         title: "Session created!",
-        description: "Setting up your workspace...",
+        description: "AI is generating your code...",
       });
     } catch (error) {
       console.error("Error creating session:", error);
@@ -116,12 +128,13 @@ const Hero = () => {
     }
   };
 
-  const seedReactFiles = async (sessionId: string) => {
+  const seedMinimalFiles = async (sessionId: string) => {
     try {
-      console.log('Creating files in Firestore for session:', sessionId);
+      console.log('Creating minimal starter files for session:', sessionId);
       const filesRef = collection(db, 'sessions', sessionId, 'files');
       
-      const initialFiles = [
+      // Just create a minimal loading state - AI will generate the real code
+      const minimalFiles = [
       {
         path: 'src/App.tsx',
         name: 'App.tsx',
@@ -133,11 +146,11 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>🎨 Welcome to VibeCode!</h1>
-        <p>Your AI-powered collaborative coding workspace</p>
-        <p className="hint">AI will generate and update code here based on your prompts</p>
-      </header>
+      <div className="loading">
+        <h1>🤖 AI is generating your code...</h1>
+        <p>Please wait while we create your application</p>
+        <div className="spinner"></div>
+      </div>
     </div>
   );
 }
@@ -151,39 +164,50 @@ export default App;`,
         type: 'file',
         language: 'css',
         content: `.App {
-  text-align: center;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0a0a0a;
+  font-family: 'Courier New', monospace;
 }
 
-.App-header {
-  background-color: rgba(255, 255, 255, 0.95);
+.loading {
+  text-align: center;
+  background: #1a1a1a;
   padding: 3rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  max-width: 600px;
+  border-radius: 8px;
+  border: 2px solid #FFD700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  max-width: 500px;
 }
 
-h1 {
-  color: #FF6B35;
+.loading h1 {
+  color: #FFD700;
   margin-bottom: 1rem;
-  font-size: 2.5rem;
+  font-family: 'Courier New', monospace;
+  font-size: 1.5rem;
 }
 
-p {
-  color: #333;
-  font-size: 1.2rem;
-  margin: 0.5rem 0;
-}
-
-.hint {
-  color: #666;
+.loading p {
+  color: #888;
+  margin-bottom: 2rem;
   font-size: 0.9rem;
-  font-style: italic;
-  margin-top: 1.5rem;
+}
+
+.spinner {
+  border: 4px solid #333;
+  border-top: 4px solid #FFD700;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }`,
         updatedAt: Timestamp.now()
       },
@@ -213,17 +237,90 @@ root.render(
         name: 'index.css',
         type: 'file',
         language: 'css',
-        content: `body {
+        content: `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 * {
   box-sizing: border-box;
+}`,
+        updatedAt: Timestamp.now()
+      },
+      {
+        path: 'package.json',
+        name: 'package.json',
+        type: 'file',
+        language: 'json',
+        content: `{
+  "name": "ai-generated-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "tailwindcss": "^3.3.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}`,
+        updatedAt: Timestamp.now()
+      },
+      {
+        path: 'tailwind.config.js',
+        name: 'tailwind.config.js',
+        type: 'file',
+        language: 'javascript',
+        content: `/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}`,
+        updatedAt: Timestamp.now()
+      },
+      {
+        path: 'postcss.config.js',
+        name: 'postcss.config.js',
+        type: 'file',
+        language: 'javascript',
+        content: `module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
 }`,
         updatedAt: Timestamp.now()
       },
@@ -237,12 +334,9 @@ root.render(
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="VibeCode - AI Collaborative Coding" />
-    <title>VibeCode App</title>
+    <title>HomerIDE - AI Generated App</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
 </html>`,
@@ -250,13 +344,13 @@ root.render(
       }
     ];
 
-      for (const file of initialFiles) {
+      for (const file of minimalFiles) {
         console.log('Adding file:', file.path);
         await addDoc(filesRef, file);
       }
-      console.log('All files added successfully!');
+      console.log('Minimal files added - AI will generate real code!');
     } catch (error) {
-      console.error('Error seeding files:', error);
+      console.error('Error seeding minimal files:', error);
       throw error;
     }
   };
