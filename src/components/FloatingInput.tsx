@@ -1,10 +1,15 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Send, GripVertical } from "lucide-react";
+import { Send, GripVertical, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 
-const FloatingInput = () => {
+interface FloatingInputProps {
+  currentFeature?: string;
+  onClearFeature?: () => void;
+}
+
+const FloatingInput = ({ currentFeature, onClearFeature }: FloatingInputProps) => {
   const [message, setMessage] = useState("");
   const [position, setPosition] = useState({ x: window.innerWidth / 2 - 150, y: window.innerHeight - 100 });
   const [isDragging, setIsDragging] = useState(false);
@@ -55,34 +60,52 @@ const FloatingInput = () => {
   };
 
   return (
-    <Card
-      ref={cardRef}
-      className="fixed z-50 bg-background border-border shadow-lg"
-      style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        cursor: isDragging ? "grabbing" : "grab",
-      }}
-    >
-      <div className="flex items-center gap-1 p-2">
-        <div
-          className="flex items-center justify-center cursor-grab active:cursor-grabbing"
-          onMouseDown={handleMouseDown}
-        >
-          <GripVertical className="w-4 h-4 text-muted-foreground" />
+    <div className="fixed z-50" style={{ left: `${position.x}px`, top: `${position.y}px` }}>
+      {currentFeature && (
+        <div className="mb-2 animate-fade-in">
+          <div className="bg-retro-amber/20 border border-retro-amber/50 rounded-lg px-3 py-2 flex items-center justify-between">
+            <span className="text-xs font-mono text-retro-amber">
+              Currently working on: <span className="font-semibold">{currentFeature}</span>
+            </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-5 w-5 hover:bg-retro-amber/30"
+              onClick={onClearFeature}
+            >
+              <X className="w-3 h-3" />
+            </Button>
+          </div>
         </div>
-        <Input
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          placeholder="Ask AI assistant..."
-          className="bg-background border-border text-xs h-8 w-64"
-        />
-        <Button onClick={handleSend} size="icon" className="h-8 w-8 shrink-0">
-          <Send className="w-3 h-3" />
-        </Button>
-      </div>
-    </Card>
+      )}
+      
+      <Card
+        ref={cardRef}
+        className="bg-background border-border shadow-lg"
+        style={{
+          cursor: isDragging ? "grabbing" : "grab",
+        }}
+      >
+        <div className="flex items-center gap-1 p-2">
+          <div
+            className="flex items-center justify-center cursor-grab active:cursor-grabbing"
+            onMouseDown={handleMouseDown}
+          >
+            <GripVertical className="w-4 h-4 text-muted-foreground" />
+          </div>
+          <Input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            placeholder="Ask AI assistant..."
+            className="bg-background border-border text-xs h-8 w-64"
+          />
+          <Button onClick={handleSend} size="icon" className="h-8 w-8 shrink-0">
+            <Send className="w-3 h-3" />
+          </Button>
+        </div>
+      </Card>
+    </div>
   );
 };
 

@@ -12,7 +12,11 @@ const items = [
   { title: "Tasks", value: "tasks", icon: ListTodo },
 ];
 
-const WorkspaceSidebar = () => {
+interface WorkspaceSidebarProps {
+  onFeatureClick?: (feature: string) => void;
+}
+
+const WorkspaceSidebar = ({ onFeatureClick }: WorkspaceSidebarProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -58,7 +62,7 @@ const WorkspaceSidebar = () => {
       {/* Content Area */}
       {isExpanded && (
         <div className="flex-1 overflow-hidden">
-          {activeTab === "document" && <DocumentView />}
+          {activeTab === "document" && <DocumentView onFeatureClick={onFeatureClick} />}
           {activeTab === "queue" && <QueueView />}
           {activeTab === "tasks" && <TasksView />}
         </div>
