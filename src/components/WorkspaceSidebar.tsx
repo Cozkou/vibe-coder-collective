@@ -1,21 +1,27 @@
-import { ListTodo, Layers } from "lucide-react";
+import { ListTodo, Layers, FileText } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import QueueView from "./QueueView";
 import TasksView from "./TasksView";
+import DocumentView from "./DocumentView";
 
 const items = [
+  { title: "Document", value: "document", icon: FileText },
   { title: "Queue", value: "queue", icon: Layers },
   { title: "Tasks", value: "tasks", icon: ListTodo },
 ];
 
-const WorkspaceSidebar = () => {
+interface WorkspaceSidebarProps {
+  onDocumentTextClick?: (text: string) => void;
+}
+
+const WorkspaceSidebar = ({ onDocumentTextClick }: WorkspaceSidebarProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const activeTab = searchParams.get("tab") || "queue";
+  const activeTab = searchParams.get("tab") || "document";
 
   const handleTabChange = (value: string) => {
     navigate(`?tab=${value}`);
@@ -55,6 +61,7 @@ const WorkspaceSidebar = () => {
       {/* Content Area */}
       {isExpanded && (
         <div className="flex-1 overflow-hidden">
+          {activeTab === "document" && <DocumentView onTextClick={onDocumentTextClick} />}
           {activeTab === "queue" && <QueueView />}
           {activeTab === "tasks" && <TasksView />}
         </div>

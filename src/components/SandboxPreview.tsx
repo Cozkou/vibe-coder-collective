@@ -1,8 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText } from "lucide-react";
 import FileView from "./FileView";
-import DocumentView from "./DocumentView";
 
 interface SandboxPreviewProps {
   viewMode: "preview" | "code" | "document";
@@ -23,15 +21,6 @@ const SandboxPreview = ({ viewMode, onViewModeChange }: SandboxPreviewProps) => 
             Code
           </Button>
           <Button
-            variant={viewMode === "document" ? "default" : "ghost"}
-            size="sm"
-            onClick={() => onViewModeChange("document")}
-            className="h-6 rounded-none font-mono text-xs px-3 gap-1"
-          >
-            <FileText className="w-3 h-3" />
-            Doc
-          </Button>
-          <Button
             variant={viewMode === "preview" ? "default" : "ghost"}
             size="sm"
             onClick={() => onViewModeChange("preview")}
@@ -49,10 +38,6 @@ const SandboxPreview = ({ viewMode, onViewModeChange }: SandboxPreviewProps) => 
               className="w-full h-full"
               title="Preview"
             />
-          </div>
-        ) : viewMode === "document" ? (
-          <div className="w-full h-full bg-background overflow-hidden">
-            <DocumentView />
           </div>
         ) : (
           <div className="w-full h-full bg-background overflow-hidden">

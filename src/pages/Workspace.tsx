@@ -18,6 +18,18 @@ const Workspace = () => {
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [viewMode, setViewMode] = useState<"preview" | "code" | "document">("preview");
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [showChatbot, setShowChatbot] = useState(false);
+  const [chatbotContext, setChatbotContext] = useState<string | undefined>();
+
+  const handleDocumentTextClick = (text: string) => {
+    setChatbotContext(text);
+    setShowChatbot(true);
+  };
+
+  const handleCloseChatbot = () => {
+    setShowChatbot(false);
+    setChatbotContext(undefined);
+  };
 
   const handleOpenPreview = () => {
     window.open(window.location.origin, "_blank");
@@ -80,20 +92,23 @@ const Workspace = () => {
         )}
         
         {/* Left Sidebar - hidden in focus mode */}
-        {!isFocusMode && <WorkspaceSidebar />}
+        {!isFocusMode && <WorkspaceSidebar onDocumentTextClick={handleDocumentTextClick} />}
 
         <ResizablePanelGroup direction="horizontal" className={`flex-1 ${isFocusMode ? 'relative z-20' : ''}`}>
           {/* Center - Sandbox Preview */}
-          <ResizablePanel defaultSize={70} minSize={30}>
+          <ResizablePanel defaultSize={showChatbot ? 70 : 100} minSize={30}>
             <SandboxPreview viewMode={viewMode} onViewModeChange={setViewMode} />
           </ResizablePanel>
           
-          <ResizableHandle withHandle />
-          
-          {/* Right - Chatbot */}
-          <ResizablePanel defaultSize={30} minSize={15} maxSize={40}>
-            <ChatBot />
-          </ResizablePanel>
+          {showChatbot && (
+            <>
+              <ResizableHandle withHandle />
+              {/* Right - Chatbot */}
+              <ResizablePanel defaultSize={30} minSize={15} maxSize={40}>
+                <ChatBot initialContext={chatbotContext} onClose={handleCloseChatbot} />
+              </ResizablePanel>
+            </>
+          )}
         </ResizablePanelGroup>
       </div>
 
