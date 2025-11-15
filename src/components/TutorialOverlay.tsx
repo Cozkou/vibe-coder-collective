@@ -34,27 +34,20 @@ const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) 
 
   return (
     <div className="fixed inset-0 z-50 pointer-events-none">
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-background/95 animate-fade-in pointer-events-auto" />
+      {/* Dark overlay with cutout for clickable feature */}
+      <div className="absolute inset-0 pointer-events-auto" style={{
+        background: 'radial-gradient(circle at 140px 152px, transparent 0, transparent 150px, hsl(var(--background) / 0.95) 150px)'
+      }} />
       
-      {/* Spotlight on first feature */}
-      <div className="absolute left-4 top-32 w-72 h-12 bg-retro-amber/10 rounded-lg border-2 border-retro-amber shadow-[0_0_30px_rgba(251,191,36,0.4)] animate-pulse pointer-events-none" />
+      {/* Spotlight border on first feature - exact size */}
+      <div className="absolute left-4 top-[120px] w-[272px] h-12 rounded border-2 border-retro-amber shadow-[0_0_30px_rgba(251,191,36,0.4)] animate-pulse pointer-events-none" />
       
       {/* Homer and speech bubble - Bottom Left */}
-      <div className="absolute bottom-8 left-8 flex items-end gap-4 animate-[slide-in-from-bottom_0.6s_ease-out] pointer-events-auto">
-        {/* Homer */}
-        <div className="w-32 h-44">
-          <img 
-            src={homerImage} 
-            alt="Homer Simpson" 
-            className="w-full h-full object-contain"
-          />
-        </div>
-        
-        {/* Speech bubble */}
-        <div className="relative mb-4">
-          {/* Bubble tail pointing to Homer */}
-          <div className="absolute -left-4 bottom-8 w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[16px] border-r-card" />
+      <div className="absolute bottom-8 left-8 flex flex-col items-start gap-4 animate-[slide-in-from-bottom_0.6s_ease-out] pointer-events-none">
+        {/* Speech bubble - Top Right */}
+        <div className="relative ml-auto mr-8">
+          {/* Bubble tail pointing down to Homer */}
+          <div className="absolute -bottom-3 left-8 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[16px] border-t-card" />
           
           {/* Bubble content */}
           <div className="bg-card border-2 border-retro-amber rounded-lg p-5 shadow-lg max-w-md">
@@ -62,6 +55,15 @@ const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) 
               Ah, now we have the first mock of the website. Now let's pick our first feature for our to work on!
             </p>
           </div>
+        </div>
+        
+        {/* Homer - Much Bigger */}
+        <div className="w-64 h-80">
+          <img 
+            src={homerImage} 
+            alt="Homer Simpson" 
+            className="w-full h-full object-contain"
+          />
         </div>
       </div>
     </div>
