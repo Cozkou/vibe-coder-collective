@@ -31,33 +31,33 @@ const TeamSetupModal = ({ open, onClose, sessionId }: TeamSetupModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-background/95 backdrop-blur-xl border border-border/50">
+      <DialogContent className="bg-card backdrop-blur-xl border border-border">
         <DialogHeader>
-          <DialogTitle className="text-2xl bg-gradient-to-r from-cosmic-purple to-cosmic-cyan bg-clip-text text-transparent">
+          <DialogTitle className="text-2xl font-mono text-retro-amber">
             Setup Your Team
           </DialogTitle>
         </DialogHeader>
         
         <div className="space-y-6 py-4">
           <div className="space-y-2">
-            <Label htmlFor="teamSize">How many people are on your team?</Label>
+            <Label htmlFor="teamSize" className="font-mono text-sm">How many people are on your team?</Label>
             <Input
               id="teamSize"
               type="number"
               min="1"
               value={teamSize}
               onChange={(e) => setTeamSize(e.target.value)}
-              className="bg-background/50 border-border/50"
+              className="bg-background border-border font-mono"
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Share this link with your team</Label>
+            <Label className="font-mono text-sm">Share this link with your team</Label>
             <div className="flex gap-2">
               <Input
                 value={sessionLink}
                 readOnly
-                className="bg-background/50 border-border/50"
+                className="bg-background border-border font-mono text-xs"
               />
               <Button
                 onClick={handleCopy}
@@ -72,7 +72,7 @@ const TeamSetupModal = ({ open, onClose, sessionId }: TeamSetupModalProps) => {
 
           <Button
             onClick={onClose}
-            className="w-full bg-gradient-to-r from-cosmic-purple to-cosmic-cyan hover:opacity-90"
+            className="w-full bg-retro-amber text-background hover:bg-retro-amber/90 font-mono"
           >
             Start Collaborating
           </Button>

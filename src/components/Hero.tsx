@@ -6,12 +6,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import TeamSetupModal from "./TeamSetupModal";
 
 const Hero = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     if (!prompt.trim()) {
@@ -36,7 +39,8 @@ const Hero = () => {
 
       if (error) throw error;
 
-      navigate(`/workspace/${data.id}`);
+      setSessionId(data.id);
+      setModalOpen(true);
     } catch (error) {
       console.error("Error creating session:", error);
       toast({
@@ -45,6 +49,13 @@ const Hero = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if (sessionId) {
+      navigate(`/workspace/${sessionId}`);
     }
   };
 
@@ -117,6 +128,14 @@ const Hero = () => {
           </div>
         </div>
       </div>
+
+      {sessionId && (
+        <TeamSetupModal
+          open={modalOpen}
+          onClose={handleModalClose}
+          sessionId={sessionId}
+        />
+      )}
     </div>
   );
 };
