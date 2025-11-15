@@ -70,12 +70,12 @@ const Hero = () => {
         className="absolute inset-0 opacity-20"
         style={{
           backgroundImage: `
-            radial-gradient(circle at center, hsl(45 100% 55%) 1px, transparent 1px),
+            radial-gradient(circle, hsl(45 100% 55%) 2px, transparent 2px),
             linear-gradient(to right, hsl(45 100% 55% / 0.1) 1px, transparent 1px),
             linear-gradient(to bottom, hsl(45 100% 55% / 0.1) 1px, transparent 1px)
           `,
-          backgroundSize: '50px 50px, 50px 50px, 50px 50px',
-          backgroundPosition: '0 0, 0 0, 0 0'
+          backgroundSize: '80px 80px',
+          backgroundPosition: '0 0'
         }}
       />
       
@@ -84,10 +84,10 @@ const Hero = () => {
         <div className="max-w-5xl mx-auto">
           <div className="text-center space-y-4 mb-8">
             <h1 className="text-5xl md:text-6xl font-mono font-bold text-retro-amber">
-              VibeCode
+              HomerIDE
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-mono">
-              The collaborative coding environment where teams vibe together
+              Collaborative Vibe Coding - Made Possible
             </p>
           </div>
 
