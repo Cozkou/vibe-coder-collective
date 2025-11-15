@@ -3,11 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { useParams } from "react-router-dom";
 
-interface DocumentViewProps {
-  onTextClick?: (text: string) => void;
-}
-
-const DocumentView = ({ onTextClick }: DocumentViewProps) => {
+const DocumentView = () => {
   const { id: sessionId } = useParams();
   const [spec, setSpec] = useState("");
   const [displayedSpec, setDisplayedSpec] = useState("");
@@ -55,7 +51,6 @@ const DocumentView = ({ onTextClick }: DocumentViewProps) => {
     
     if (text && text.length > 0) {
       setSelectedText(text);
-      onTextClick?.(text);
     }
   };
 
