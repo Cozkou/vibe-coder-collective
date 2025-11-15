@@ -40,8 +40,12 @@ const WorkspaceSidebar = ({ onFeatureClick }: WorkspaceSidebarProps) => {
           <button
             key={item.value}
             onClick={() => {
-              handleTabChange(item.value);
-              setIsExpanded(!isExpanded);
+              if (activeTab === item.value) {
+                setIsExpanded(!isExpanded);
+              } else {
+                handleTabChange(item.value);
+                setIsExpanded(true);
+              }
             }}
             className={cn(
               "w-12 h-12 rounded flex items-center justify-center transition-colors",
