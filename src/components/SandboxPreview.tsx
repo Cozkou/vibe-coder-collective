@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileCode } from "lucide-react";
+import FileView from "./FileView";
 
 interface SandboxPreviewProps {
   viewMode: "preview" | "code";
@@ -40,16 +40,8 @@ const SandboxPreview = ({ viewMode, onViewModeChange }: SandboxPreviewProps) => 
             />
           </div>
         ) : (
-          <div className="w-full h-full bg-background p-4 overflow-auto">
-            <div className="flex items-center justify-center h-full text-muted-foreground">
-              <div className="text-center space-y-2">
-                <FileCode className="w-12 h-12 mx-auto text-retro-amber" />
-                <p className="font-mono text-sm">Code editor coming soon</p>
-                <p className="font-mono text-xs text-muted-foreground">
-                  This will show the project files and code
-                </p>
-              </div>
-            </div>
+          <div className="w-full h-full bg-background overflow-hidden">
+            <FileView />
           </div>
         )}
       </div>

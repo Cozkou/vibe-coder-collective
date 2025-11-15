@@ -1,13 +1,11 @@
-import { FileCode, ListTodo, Layers } from "lucide-react";
+import { ListTodo, Layers } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import FileView from "./FileView";
 import QueueView from "./QueueView";
 import TasksView from "./TasksView";
 
 const items = [
-  { title: "Files", value: "files", icon: FileCode },
   { title: "Queue", value: "queue", icon: Layers },
   { title: "Tasks", value: "tasks", icon: ListTodo },
 ];
@@ -17,7 +15,7 @@ const WorkspaceSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const activeTab = searchParams.get("tab") || "files";
+  const activeTab = searchParams.get("tab") || "queue";
 
   const handleTabChange = (value: string) => {
     navigate(`?tab=${value}`);
@@ -57,7 +55,6 @@ const WorkspaceSidebar = () => {
       {/* Content Area */}
       {isExpanded && (
         <div className="flex-1 overflow-hidden">
-          {activeTab === "files" && <FileView />}
           {activeTab === "queue" && <QueueView />}
           {activeTab === "tasks" && <TasksView />}
         </div>
