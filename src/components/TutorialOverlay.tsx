@@ -36,11 +36,11 @@ const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) 
     <div className="fixed inset-0 z-50 pointer-events-none">
       {/* Dark overlay with cutout for clickable feature */}
       <div className="absolute inset-0 pointer-events-auto" style={{
-        background: 'radial-gradient(circle at 140px 152px, transparent 0, transparent 150px, hsl(var(--background) / 0.95) 150px)'
+        background: 'radial-gradient(circle at 270px 180px, transparent 0, transparent 180px, hsl(var(--background) / 0.95) 180px)'
       }} />
       
-      {/* Spotlight border on first feature - exact size */}
-      <div className="absolute left-4 top-[120px] w-[272px] h-12 rounded border-2 border-retro-amber shadow-[0_0_30px_rgba(251,191,36,0.4)] animate-pulse pointer-events-none" />
+      {/* Spotlight border on first feature - exact position in sidebar */}
+      <div className="absolute left-[132px] top-[152px] w-[calc(100%-148px)] max-w-[340px] h-[40px] rounded border-2 border-retro-amber shadow-[0_0_30px_rgba(251,191,36,0.4)] animate-pulse pointer-events-none" />
       
       {/* Homer and speech bubble - Bottom Left */}
       <div className="absolute bottom-8 left-8 flex flex-col items-start gap-4 animate-[slide-in-from-bottom_0.6s_ease-out] pointer-events-none">
