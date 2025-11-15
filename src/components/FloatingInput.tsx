@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Send, GripVertical, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
+import { useParams } from "react-router-dom";
+import { useFirestorePrompts } from "@/hooks/useFirestorePrompts";
+import { useToast } from "@/hooks/use-toast";
 
 interface FloatingInputProps {
   currentFeature?: string;
@@ -10,10 +13,22 @@ interface FloatingInputProps {
 }
 
 const FloatingInput = ({ currentFeature, onClearFeature }: FloatingInputProps) => {
+  const { sessionId } = useParams();
+  const { addPrompt } = useFirestorePrompts(sessionId);
+  const { toast } = useToast();
   const [message, setMessage] = useState("");
   const [position, setPosition] = useState({ x: window.innerWidth / 2 - 150, y: window.innerHeight - 100 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [userId] = useState(() => {
+    // Get or create a persistent user ID
+    let id = sessionStorage.getItem('userId');
+    if (!id) {
+      id = crypto.randomUUID();
+      sessionStorage.setItem('userId', id);
+    }
+    return id;
+  });
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -52,10 +67,32 @@ const FloatingInput = ({ currentFeature, onClearFeature }: FloatingInputProps) =
     };
   }, [isDragging, dragOffset]);
 
-  const handleSend = () => {
-    if (message.trim()) {
-      // TODO: Handle message sending
+  const handleSend = async () => {
+    if (!message.trim()) return;
+    
+    try {
+      // Add context about current feature if available
+      const promptContent = currentFeature 
+        ? `[Feature: ${currentFeature}] ${message}`
+        : message;
+      
+      // Save prompt to Firestore
+      await addPrompt(promptContent, userId);
+      
+      toast({
+        title: "Prompt sent!",
+        description: "AI agent will process your request",
+      });
+      
       setMessage("");
+      console.log('Prompt saved to Firestore:', promptContent);
+    } catch (error) {
+      console.error('Error saving prompt:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send prompt. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
