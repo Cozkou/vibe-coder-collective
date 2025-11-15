@@ -145,9 +145,9 @@ const Hero = () => {
       </div>
 
       {/* Footer Branding */}
-      <div className="absolute bottom-8 left-0 right-0 text-center">
+      <div className="absolute bottom-0 left-0 right-0 pb-8 text-center">
         <p className="text-sm text-muted-foreground font-mono">
-          WLDN x Builder's Brew | HomerIDE 2025 ©
+          WLDN x Builder's Brew | HomerIDE 2025 <span className="text-base">©</span>
         </p>
       </div>
 
