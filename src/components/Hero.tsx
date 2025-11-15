@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Users, Zap } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -62,24 +61,6 @@ const Hero = () => {
     }
   };
 
-  const features = [
-    {
-      icon: Sparkles,
-      title: "AI-Powered",
-      description: "Let AI handle the heavy lifting while you focus on creativity",
-    },
-    {
-      icon: Users,
-      title: "Collaborative",
-      description: "Code together in real-time with your team",
-    },
-    {
-      icon: Zap,
-      title: "Lightning Fast",
-      description: "See changes instantly with hot reload",
-    },
-  ];
-
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Hero Content */}
@@ -113,22 +94,6 @@ const Hero = () => {
               </Button>
             </div>
           </Card>
-
-          {/* Features */}
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
-            {features.map((feature, i) => (
-              <div
-                key={i}
-                className="p-6 rounded bg-card border border-border hover:border-retro-amber/50 transition-all"
-              >
-                <div className="w-12 h-12 rounded bg-retro-amber/10 flex items-center justify-center mb-4 border border-retro-amber/20">
-                  <feature.icon className="w-6 h-6 text-retro-amber" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2 font-mono">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground font-mono">{feature.description}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
