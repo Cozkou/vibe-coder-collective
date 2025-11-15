@@ -40,24 +40,6 @@ const Workspace = () => {
           </div>
           
           <div className="flex items-center gap-2">
-            <div className="flex items-center border border-border rounded overflow-hidden">
-              <Button
-                variant={viewMode === "code" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("code")}
-                className="h-8 rounded-none font-mono text-xs"
-              >
-                Code
-              </Button>
-              <Button
-                variant={viewMode === "preview" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("preview")}
-                className="h-8 rounded-none font-mono text-xs"
-              >
-                Preview
-              </Button>
-            </div>
             <Button
               variant={isFocusMode ? "default" : "ghost"}
               size="sm"
@@ -91,7 +73,7 @@ const Workspace = () => {
         <ResizablePanelGroup direction="horizontal" className={`flex-1 ${isFocusMode ? 'relative z-20' : ''}`}>
           {/* Center - Sandbox Preview */}
           <ResizablePanel defaultSize={70} minSize={30}>
-            <SandboxPreview viewMode={viewMode} />
+            <SandboxPreview viewMode={viewMode} onViewModeChange={setViewMode} />
           </ResizablePanel>
           
           <ResizableHandle withHandle />
