@@ -51,14 +51,31 @@ const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-8 left-8 z-50 flex flex-col items-start gap-4 animate-[slide-in-from-bottom_0.6s_ease-out]">
-      {/* Speech bubble - Top */}
-      <div className="relative ml-8">
-        {/* Bubble tail pointing down to Homer */}
-        <div className="absolute -bottom-3 left-8 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[16px] border-t-card" />
+    <div className="fixed bottom-0 left-8 z-50 flex items-end gap-6 animate-[slide-in-from-bottom_0.6s_ease-out]">
+      {/* Homer - Big with bottom half cut off */}
+      <div className="w-80 h-64 overflow-hidden">
+        <img 
+          src={homerImage} 
+          alt="Homer Simpson" 
+          className="w-full h-auto object-contain"
+        />
+      </div>
+      
+      {/* Speech bubble - Right side */}
+      <div className="relative mb-8 flex-1 max-w-md">
+        {/* Progress bar */}
+        <div className="mb-3 flex items-center gap-2">
+          <div className="flex-1 h-1 bg-border rounded-full overflow-hidden">
+            <div className="h-full bg-retro-amber w-1/3 transition-all duration-300" />
+          </div>
+          <span className="text-xs font-mono text-muted-foreground">Step 1 of 3</span>
+        </div>
+        
+        {/* Bubble tail pointing to Homer */}
+        <div className="absolute -left-3 bottom-8 w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[16px] border-r-card" />
         
         {/* Bubble content */}
-        <div className="bg-card border-2 border-retro-amber rounded-lg p-5 shadow-lg max-w-md">
+        <div className="bg-card border-2 border-retro-amber rounded-lg p-5 shadow-lg">
           <p className="text-base font-mono text-foreground leading-relaxed min-h-[80px]">
             {displayedText}
             {!showButton && <span className="inline-block w-2 h-4 bg-retro-amber animate-pulse ml-1" />}
@@ -73,15 +90,6 @@ const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
             </Button>
           )}
         </div>
-      </div>
-      
-      {/* Homer - Big */}
-      <div className="w-64 h-80">
-        <img 
-          src={homerImage} 
-          alt="Homer Simpson" 
-          className="w-full h-full object-contain"
-        />
       </div>
     </div>
   );
