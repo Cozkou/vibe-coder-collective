@@ -78,13 +78,13 @@ const Hero = () => {
           </div>
 
           {/* Two Column Layout */}
-          <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="grid md:grid-cols-2 gap-8 items-start">
             {/* Left: Image */}
-            <div className="flex justify-center">
+            <div className="flex justify-center md:mt-8">
               <img 
                 src={homerImage} 
                 alt="Homer Simpson" 
-                className="w-full max-w-md object-contain"
+                className="w-full max-w-md object-contain scale-x-[-1]"
               />
             </div>
 
