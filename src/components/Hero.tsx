@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Paperclip, Mic, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -76,22 +77,41 @@ const Hero = () => {
           </div>
 
           {/* Prompt Input */}
-          <Card className="p-6 bg-card border-border">
-            <div className="space-y-4">
+          <Card className="p-4 bg-card border-border">
+            <div className="space-y-3">
               <Textarea
                 placeholder="Describe what you want to build... (e.g., Create a modern dashboard with user authentication)"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[120px] bg-background border-border resize-none font-mono text-sm"
+                className="min-h-[80px] bg-background border-border resize-none font-mono text-sm"
               />
-              <Button 
-                size="lg"
-                className="w-full bg-retro-amber text-background hover:bg-retro-amber/90 font-mono"
-                onClick={handleSubmit}
-                disabled={isLoading}
-              >
-                {isLoading ? "Creating..." : "Start Building"}
-              </Button>
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                  >
+                    <Paperclip className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                  >
+                    <Mic className="w-4 h-4" />
+                  </Button>
+                </div>
+                <Button
+                  size="sm"
+                  className="bg-retro-amber text-background hover:bg-retro-amber/90 font-mono h-9 px-4 gap-2"
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Creating..." : "Start Building"}
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           </Card>
         </div>
