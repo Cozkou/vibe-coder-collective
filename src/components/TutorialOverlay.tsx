@@ -14,8 +14,8 @@ const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) 
   const [currentStep, setCurrentStep] = useState(1);
   
   const tutorialSteps = [
-    "Ah, now we have the first mock of the website. Now let's pick our first feature for us to work on!",
-    "Now that you've added the first feature, feel free to type anything in the prompt to make any changes!"
+    "Ah, now we have the first mock of the website. Now let's pick our first feature for us to work on! All context about the site will be in the 'Product Spec' section.",
+    "Now that you've added the first feature, feel free to type anything in the prompt to make any changes! Any changes that you prompt will automatically update the Product Spec."
   ];
 
   useEffect(() => {
