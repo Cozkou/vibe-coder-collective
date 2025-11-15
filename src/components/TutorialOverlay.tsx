@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import homerImage from "@/assets/homer-tutorial.png";
 
 interface TutorialOverlayProps {
   sessionId?: string;
-  onFeatureClicked?: boolean;
 }
 
-const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) => {
+const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [displayedText, setDisplayedText] = useState("");
+  const [showButton, setShowButton] = useState(false);
+  
+  const fullText = "Ah, now we have the first mock of the website. Now let's pick our first feature for our to work on!";
 
   useEffect(() => {
     // Check if tutorial has been completed for this session
@@ -21,50 +25,63 @@ const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) 
   }, [sessionId]);
 
   useEffect(() => {
-    // Dismiss when feature is clicked
-    if (onFeatureClicked) {
-      setIsVisible(false);
-      if (sessionId) {
-        sessionStorage.setItem(`tutorial-completed-${sessionId}`, 'true');
+    if (!isVisible) return;
+    
+    let currentIndex = 0;
+    const typingInterval = setInterval(() => {
+      if (currentIndex <= fullText.length) {
+        setDisplayedText(fullText.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+        setShowButton(true);
       }
+    }, 30);
+
+    return () => clearInterval(typingInterval);
+  }, [isVisible]);
+
+  const handleDismiss = () => {
+    setIsVisible(false);
+    if (sessionId) {
+      sessionStorage.setItem(`tutorial-completed-${sessionId}`, 'true');
     }
-  }, [onFeatureClicked, sessionId]);
+  };
 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 pointer-events-none">
-      {/* Dark overlay with cutout for clickable feature */}
-      <div className="absolute inset-0 pointer-events-auto" style={{
-        background: 'radial-gradient(circle at 270px 180px, transparent 0, transparent 180px, hsl(var(--background) / 0.95) 180px)'
-      }} />
-      
-      {/* Spotlight border on first feature - exact position in sidebar */}
-      <div className="absolute left-[132px] top-[152px] w-[calc(100%-148px)] max-w-[340px] h-[40px] rounded border-2 border-retro-amber shadow-[0_0_30px_rgba(251,191,36,0.4)] animate-pulse pointer-events-none" />
-      
-      {/* Homer and speech bubble - Bottom Left */}
-      <div className="absolute bottom-8 left-8 flex flex-col items-start gap-4 animate-[slide-in-from-bottom_0.6s_ease-out] pointer-events-none">
-        {/* Speech bubble - Top Right */}
-        <div className="relative ml-auto mr-8">
-          {/* Bubble tail pointing down to Homer */}
-          <div className="absolute -bottom-3 left-8 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[16px] border-t-card" />
-          
-          {/* Bubble content */}
-          <div className="bg-card border-2 border-retro-amber rounded-lg p-5 shadow-lg max-w-md">
-            <p className="text-base font-mono text-foreground leading-relaxed">
-              Ah, now we have the first mock of the website. Now let's pick our first feature for our to work on!
-            </p>
-          </div>
-        </div>
+    <div className="fixed bottom-8 left-8 z-50 flex flex-col items-start gap-4 animate-[slide-in-from-bottom_0.6s_ease-out]">
+      {/* Speech bubble - Top */}
+      <div className="relative ml-8">
+        {/* Bubble tail pointing down to Homer */}
+        <div className="absolute -bottom-3 left-8 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[16px] border-t-card" />
         
-        {/* Homer - Much Bigger */}
-        <div className="w-64 h-80">
-          <img 
-            src={homerImage} 
-            alt="Homer Simpson" 
-            className="w-full h-full object-contain"
-          />
+        {/* Bubble content */}
+        <div className="bg-card border-2 border-retro-amber rounded-lg p-5 shadow-lg max-w-md">
+          <p className="text-base font-mono text-foreground leading-relaxed min-h-[80px]">
+            {displayedText}
+            {!showButton && <span className="inline-block w-2 h-4 bg-retro-amber animate-pulse ml-1" />}
+          </p>
+          
+          {showButton && (
+            <Button
+              onClick={handleDismiss}
+              className="mt-4 bg-retro-amber text-background hover:bg-retro-amber/90 font-mono animate-fade-in"
+            >
+              Got it!
+            </Button>
+          )}
         </div>
+      </div>
+      
+      {/* Homer - Big */}
+      <div className="w-64 h-80">
+        <img 
+          src={homerImage} 
+          alt="Homer Simpson" 
+          className="w-full h-full object-contain"
+        />
       </div>
     </div>
   );
