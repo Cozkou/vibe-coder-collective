@@ -1,16 +1,11 @@
 import WorkspaceSidebar from "@/components/WorkspaceSidebar";
 import SandboxPreview from "@/components/SandboxPreview";
-import ChatBot from "@/components/ChatBot";
+import FloatingInput from "@/components/FloatingInput";
 import ShareCodeModal from "@/components/ShareCodeModal";
 import { Button } from "@/components/ui/button";
 import { Home, Focus, Bell, Share2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 
 const Workspace = () => {
   const navigate = useNavigate();
@@ -18,18 +13,6 @@ const Workspace = () => {
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [viewMode, setViewMode] = useState<"preview" | "code" | "document">("preview");
   const [shareModalOpen, setShareModalOpen] = useState(false);
-  const [showChatbot, setShowChatbot] = useState(false);
-  const [chatbotContext, setChatbotContext] = useState<string | undefined>();
-
-  const handleDocumentTextClick = (text: string) => {
-    setChatbotContext(text);
-    setShowChatbot(true);
-  };
-
-  const handleCloseChatbot = () => {
-    setShowChatbot(false);
-    setChatbotContext(undefined);
-  };
 
   const handleOpenPreview = () => {
     window.open(window.location.origin, "_blank");
@@ -92,26 +75,16 @@ const Workspace = () => {
         )}
         
         {/* Left Sidebar - hidden in focus mode */}
-        {!isFocusMode && <WorkspaceSidebar onDocumentTextClick={handleDocumentTextClick} />}
+        {!isFocusMode && <WorkspaceSidebar />}
 
-        <ResizablePanelGroup direction="horizontal" className={`flex-1 ${isFocusMode ? 'relative z-20' : ''}`}>
-          {/* Center - Sandbox Preview */}
-          <ResizablePanel defaultSize={showChatbot ? 70 : 100} minSize={30}>
-            <SandboxPreview viewMode={viewMode} onViewModeChange={setViewMode} />
-          </ResizablePanel>
-          
-          {showChatbot && (
-            <>
-              <ResizableHandle withHandle />
-              {/* Right - Chatbot */}
-              <ResizablePanel defaultSize={30} minSize={15} maxSize={40}>
-                <ChatBot initialContext={chatbotContext} onClose={handleCloseChatbot} />
-              </ResizablePanel>
-            </>
-          )}
-        </ResizablePanelGroup>
+        {/* Center - Sandbox Preview */}
+        <div className={`flex-1 ${isFocusMode ? 'relative z-20' : ''}`}>
+          <SandboxPreview viewMode={viewMode} onViewModeChange={setViewMode} />
+        </div>
       </div>
 
+      {/* Floating Input */}
+      <FloatingInput />
       {sessionId && (
         <ShareCodeModal
           open={shareModalOpen}

@@ -12,11 +12,7 @@ const items = [
   { title: "Tasks", value: "tasks", icon: ListTodo },
 ];
 
-interface WorkspaceSidebarProps {
-  onDocumentTextClick?: (text: string) => void;
-}
-
-const WorkspaceSidebar = ({ onDocumentTextClick }: WorkspaceSidebarProps) => {
+const WorkspaceSidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -33,27 +29,28 @@ const WorkspaceSidebar = ({ onDocumentTextClick }: WorkspaceSidebarProps) => {
         "h-full bg-background border-r border-border transition-all duration-300 flex",
         isExpanded ? "w-72" : "w-16"
       )}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
     >
       {/* Icon Navigation */}
       <div className="w-16 flex flex-col gap-1 p-2 border-r border-border">
         {items.map((item) => {
           const Icon = item.icon;
           return (
-            <button
-              key={item.value}
-              onClick={() => handleTabChange(item.value)}
-              className={cn(
-                "w-12 h-12 rounded flex items-center justify-center transition-colors",
-                activeTab === item.value
-                  ? "bg-retro-amber/20 text-retro-amber border border-retro-amber/30"
-                  : "hover:bg-accent/10 text-muted-foreground"
-              )}
-              title={item.title}
-            >
-              <Icon className="w-5 h-5" />
-            </button>
+          <button
+            key={item.value}
+            onClick={() => {
+              handleTabChange(item.value);
+              setIsExpanded(!isExpanded);
+            }}
+            className={cn(
+              "w-12 h-12 rounded flex items-center justify-center transition-colors",
+              activeTab === item.value
+                ? "bg-retro-amber/20 text-retro-amber border border-retro-amber/30"
+                : "hover:bg-accent/10 text-muted-foreground"
+            )}
+            title={item.title}
+          >
+            <Icon className="w-5 h-5" />
+          </button>
           );
         })}
       </div>
@@ -61,7 +58,7 @@ const WorkspaceSidebar = ({ onDocumentTextClick }: WorkspaceSidebarProps) => {
       {/* Content Area */}
       {isExpanded && (
         <div className="flex-1 overflow-hidden">
-          {activeTab === "document" && <DocumentView onTextClick={onDocumentTextClick} />}
+          {activeTab === "document" && <DocumentView />}
           {activeTab === "queue" && <QueueView />}
           {activeTab === "tasks" && <TasksView />}
         </div>
