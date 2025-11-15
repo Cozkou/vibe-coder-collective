@@ -64,6 +64,24 @@ const Hero = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+      {/* Sun with Rays */}
+      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-64 h-64 pointer-events-none">
+        {/* Rotating Sun */}
+        <div className="absolute inset-0 animate-[spin_20s_linear_infinite]">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-retro-amber to-retro-orange shadow-[0_0_60px_20px_hsl(var(--retro-amber)/0.4)]" />
+          {/* Sun Rays */}
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute top-1/2 left-1/2 w-1 h-24 bg-gradient-to-t from-retro-amber to-transparent origin-bottom"
+              style={{
+                transform: `translate(-50%, -50%) rotate(${i * 30}deg) translateY(-80px)`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+      
       {/* Hero Content */}
       <div className="relative z-10 container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto space-y-8">
