@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import homerImage from "@/assets/homer-tutorial.png";
 
 interface TutorialOverlayProps {
   sessionId?: string;
+  onFeatureClicked?: boolean;
 }
 
-const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
+const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -21,27 +20,30 @@ const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
     }
   }, [sessionId]);
 
-  const handleDismiss = () => {
-    setIsVisible(false);
-    if (sessionId) {
-      sessionStorage.setItem(`tutorial-completed-${sessionId}`, 'true');
+  useEffect(() => {
+    // Dismiss when feature is clicked
+    if (onFeatureClicked) {
+      setIsVisible(false);
+      if (sessionId) {
+        sessionStorage.setItem(`tutorial-completed-${sessionId}`, 'true');
+      }
     }
-  };
+  }, [onFeatureClicked, sessionId]);
 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 pointer-events-none">
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-background/95 animate-fade-in" />
+      <div className="absolute inset-0 bg-background/95 animate-fade-in pointer-events-auto" />
       
       {/* Spotlight on first feature */}
-      <div className="absolute left-4 top-32 w-72 h-12 bg-retro-amber/10 rounded-lg border-2 border-retro-amber shadow-[0_0_30px_rgba(251,191,36,0.4)] animate-pulse" />
+      <div className="absolute left-4 top-32 w-72 h-12 bg-retro-amber/10 rounded-lg border-2 border-retro-amber shadow-[0_0_30px_rgba(251,191,36,0.4)] animate-pulse pointer-events-none" />
       
-      {/* Homer and speech bubble container */}
-      <div className="relative z-10 flex items-center gap-6 animate-scale-in">
+      {/* Homer and speech bubble - Bottom Left */}
+      <div className="absolute bottom-8 left-8 flex items-end gap-4 animate-[slide-in-from-bottom_0.6s_ease-out] pointer-events-auto">
         {/* Homer */}
-        <div className="w-48 h-64">
+        <div className="w-32 h-44">
           <img 
             src={homerImage} 
             alt="Homer Simpson" 
@@ -50,31 +52,15 @@ const TutorialOverlay = ({ sessionId }: TutorialOverlayProps) => {
         </div>
         
         {/* Speech bubble */}
-        <div className="relative max-w-md">
-          {/* Bubble tail */}
-          <div className="absolute -left-4 top-8 w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[16px] border-r-card" />
+        <div className="relative mb-4">
+          {/* Bubble tail pointing to Homer */}
+          <div className="absolute -left-4 bottom-8 w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[16px] border-r-card" />
           
           {/* Bubble content */}
-          <div className="bg-card border-2 border-retro-amber rounded-lg p-6 shadow-lg">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 h-6 w-6"
-              onClick={handleDismiss}
-            >
-              <X className="w-4 h-4" />
-            </Button>
-            
-            <p className="text-lg font-mono text-foreground leading-relaxed pr-6">
+          <div className="bg-card border-2 border-retro-amber rounded-lg p-5 shadow-lg max-w-md">
+            <p className="text-base font-mono text-foreground leading-relaxed">
               Ah, now we have the first mock of the website. Now let's pick our first feature for our to work on!
             </p>
-            
-            <Button
-              onClick={handleDismiss}
-              className="mt-4 bg-retro-amber text-background hover:bg-retro-amber/90 font-mono"
-            >
-              Got it!
-            </Button>
           </div>
         </div>
       </div>
