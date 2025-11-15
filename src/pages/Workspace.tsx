@@ -16,7 +16,7 @@ const Workspace = () => {
   const navigate = useNavigate();
   const { id: sessionId } = useParams();
   const [isFocusMode, setIsFocusMode] = useState(false);
-  const [viewMode, setViewMode] = useState<"preview" | "code">("preview");
+  const [viewMode, setViewMode] = useState<"preview" | "code" | "document">("preview");
   const [shareModalOpen, setShareModalOpen] = useState(false);
 
   const handleOpenPreview = () => {
