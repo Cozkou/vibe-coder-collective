@@ -68,12 +68,12 @@ const Workspace = () => {
         )}
         
         {/* Left Sidebar - hidden in focus mode */}
-        {!isFocusMode && <WorkspaceSidebar viewMode={viewMode} onViewModeChange={setViewMode} />}
+        {!isFocusMode && <WorkspaceSidebar />}
 
         <ResizablePanelGroup direction="horizontal" className={`flex-1 ${isFocusMode ? 'relative z-20' : ''}`}>
           {/* Center - Sandbox Preview */}
           <ResizablePanel defaultSize={70} minSize={30}>
-            <SandboxPreview viewMode={viewMode} />
+            <SandboxPreview viewMode={viewMode} onViewModeChange={setViewMode} />
           </ResizablePanel>
           
           <ResizableHandle withHandle />
