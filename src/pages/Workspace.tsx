@@ -53,7 +53,7 @@ const Workspace = () => {
               <Home className="w-4 h-4" />
             </Button>
             <h1 className="text-lg font-mono font-bold text-retro-amber">
-              VibeCode
+              HomerIDE
             </h1>
           </div>
           
