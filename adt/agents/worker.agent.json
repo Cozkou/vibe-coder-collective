@@ -1,0 +1,30 @@
+{
+  "name": "worker_agent",
+  "description": "Applies atomic code patches for approved tasks while reporting completion status.",
+  "entry_point": "../src/agents/worker.ts",
+  "runtime": "nodejs18",
+  "capabilities": ["code_write", "memory_read"],
+  "inputs_schema": {
+    "type": "object",
+    "required": ["task", "patches"],
+    "properties": {
+      "task": { "type": "object" },
+      "patches": { "type": "array", "items": { "type": "object" } }
+    }
+  },
+  "outputs_schema": {
+    "type": "object",
+    "properties": {
+      "taskId": { "type": "string" },
+      "status": { "enum": ["done"] },
+      "appliedFiles": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "triggers": [
+    {
+      "channel": "task_dispatch",
+      "filter": {}
+    }
+  ]
+}
+

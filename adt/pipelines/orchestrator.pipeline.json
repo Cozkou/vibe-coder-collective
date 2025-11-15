@@ -1,0 +1,50 @@
+{
+  "name": "adt_vibe_pipeline",
+  "description": "Routes project events through the ADT multi-agent team.",
+  "channels": [
+    "document_uploaded",
+    "nlp_command_received",
+    "task_dispatch",
+    "task_completed",
+    "proposal_pipeline",
+    "proposal_decision",
+    "document_update_channel"
+  ],
+  "routes": [
+    {
+      "from": "document_uploaded",
+      "to": "document_splitter_agent"
+    },
+    {
+      "from": "document_uploaded",
+      "to": "document_updater_agent"
+    },
+    {
+      "from": "nlp_command_received",
+      "to": "coordinator_agent"
+    },
+    {
+      "from": "coordinator_agent",
+      "condition": "decision.action.type === 'new_proposal'",
+      "to": "feature_proposal_manager_agent"
+    },
+    {
+      "from": "coordinator_agent",
+      "condition": "tasks && tasks.length",
+      "to": "worker_agent"
+    },
+    {
+      "from": "worker_agent",
+      "to": "document_updater_agent"
+    },
+    {
+      "from": "proposal_decision",
+      "to": "feature_proposal_manager_agent"
+    },
+    {
+      "from": "feature_proposal_manager_agent",
+      "to": "document_updater_agent"
+    }
+  ]
+}
+

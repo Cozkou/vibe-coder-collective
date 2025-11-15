@@ -1,0 +1,147 @@
+{
+  "project_id": "demo-project",
+  "source_document_path": "C:\\Users\\Valencia\\Downloads\\vibe-coder-collective\\vibe-coder-collective\\adt\\document-store\\specs\\demo-vibe-project.md",
+  "base_app": {
+    "summary": "Collaborative vibe-coding dashboard for non-technical founders to describe app behavior in natural language and see it materialize in real time.",
+    "architecture": [
+      "Frontend: Vite + React + Tailwind + shadcn/ui",
+      "Backend: Supabase functions",
+      "Realtime: Supabase channels",
+      "Auth: Magic-link email",
+      "Hosting: Vercel (frontend), Supabase (backend)"
+    ],
+    "tech_stack": [
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Supabase"
+    ],
+    "key_routes": [
+      "/login",
+      "/dashboard",
+      "/projects/:id",
+      "/projects/:id/spec",
+      "/projects/:id/proposals",
+      "/projects/:id/activity-log"
+    ]
+  },
+  "features": [
+    {
+      "id": "feature_1",
+      "status": "pending",
+      "title": "Project Creation Wizard",
+      "description": "Onboard new projects with an intuitive wizard that includes document upload capabilities.",
+      "tags": [
+        "onboarding",
+        "project management",
+        "document upload"
+      ]
+    },
+    {
+      "id": "feature_2",
+      "status": "pending",
+      "title": "Feature Proposal & Approval",
+      "description": "Allow users to propose new features and manage an approval workflow, with email and in-app notifications for decisions.",
+      "tags": [
+        "collaboration",
+        "workflow",
+        "notifications",
+        "approvals"
+      ]
+    },
+    {
+      "id": "feature_3",
+      "status": "pending",
+      "title": "NLP Command Console",
+      "description": "Enable users to describe app behavior using natural language commands within each project, facilitating real-time materialized changes.",
+      "tags": [
+        "natural language processing",
+        "realtime",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "feature_4",
+      "status": "pending",
+      "title": "Task Queue Visualization",
+      "description": "Provide a clear view of tasks with statuses like pending, running, blocked, and done.",
+      "tags": [
+        "task management",
+        "progress tracking",
+        "visualization"
+      ]
+    },
+    {
+      "id": "feature_5",
+      "status": "pending",
+      "title": "Activity Log with Filtering",
+      "description": "Maintain a detailed log of project activities, including proposals, tasks, and approvals, with filtering options.",
+      "tags": [
+        "auditing",
+        "activity tracking",
+        "filtering"
+      ]
+    }
+  ],
+  "proposals": [],
+  "tasks": [
+    {
+      "id": "2440cabe-0a4a-4c55-88b5-fb0226371f13",
+      "feature_id": "feature_1",
+      "title": "Implement: Implement feature \"Project Creation Wizard\" described as: On",
+      "description": "Implement feature \"Project Creation Wizard\" described as: Onboard new projects with an intuitive wizard that includes document upload capabilities..\nAdditional instructions:\nBuild the base vibe-coding application scaffolding according to the uploaded specification.\nSummary: Collaborative vibe-coding dashboard for non-technical founders to describe app behavior in natural language and see it materialize in real time.\nArchitecture: Frontend: Vite + React + Tailwind + shadcn/ui, Backend: Supabase functions, Realtime: Supabase channels, Auth: Magic-link email, Hosting: Vercel (frontend), Supabase (backend)\nTech Stack: React, Vite, Tailwind CSS, shadcn/ui, Supabase\nKey Routes: /login, /dashboard, /projects/:id, /projects/:id/spec, /projects/:id/proposals, /projects/:id/activity-log",
+      "status": "done",
+      "files": [],
+      "assignee": "local-user",
+      "created_at": "2025-11-15T15:58:58.982Z",
+      "updated_at": "2025-11-15T15:59:12.771Z"
+    }
+  ],
+  "activity_log": [
+    {
+      "id": "b1cf7719-f506-47fa-8e85-a5bcdf3dd09c",
+      "timestamp": "2025-11-15T15:58:52.083Z",
+      "actor": "local-user",
+      "type": "document_split",
+      "payload": {
+        "projectId": "demo-project",
+        "featureCount": 5,
+        "storagePath": "adt/document-store/master-document.json"
+      }
+    },
+    {
+      "id": "283b3e0f-ba2e-47a8-bc4b-9be5c245ae45",
+      "timestamp": "2025-11-15T15:58:55.069Z",
+      "actor": "local-user",
+      "type": "document_split",
+      "payload": {
+        "projectId": "demo-project",
+        "features": 5,
+        "summary": "This project event, identified as `document_split` within `demo-project`, involved the processing of 5 features."
+      }
+    },
+    {
+      "id": "6db2bc56-5ebb-47fe-b639-90b7f6c51091",
+      "timestamp": "2025-11-15T15:58:58.984Z",
+      "actor": "local-user",
+      "type": "feature_status_changed",
+      "payload": {
+        "featureId": "feature_1",
+        "taskId": "2440cabe-0a4a-4c55-88b5-fb0226371f13"
+      }
+    },
+    {
+      "id": "f8226b5b-ce4b-412c-84a6-9d6094f81682",
+      "timestamp": "2025-11-15T15:59:12.771Z",
+      "actor": "adt-system",
+      "type": "task_completed",
+      "payload": {
+        "taskId": "2440cabe-0a4a-4c55-88b5-fb0226371f13",
+        "status": "done"
+      }
+    }
+  ],
+  "updated_at": "2025-11-15T15:59:12.771Z"
+}

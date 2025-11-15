@@ -1,0 +1,28 @@
+{
+  "name": "coordinator_agent",
+  "description": "Routes NLP commands to existing features, approved work, or proposal flow while slicing tasks for workers.",
+  "entry_point": "../src/agents/coordinator.ts",
+  "runtime": "nodejs18",
+  "capabilities": ["memory_read", "task_queue_write"],
+  "inputs_schema": {
+    "type": "object",
+    "required": ["command"],
+    "properties": {
+      "command": { "type": "object" }
+    }
+  },
+  "outputs_schema": {
+    "type": "object",
+    "properties": {
+      "decision": { "type": "object" },
+      "tasks": { "type": ["array", "null"] }
+    }
+  },
+  "triggers": [
+    {
+      "channel": "nlp_command_received",
+      "filter": {}
+    }
+  ]
+}
+

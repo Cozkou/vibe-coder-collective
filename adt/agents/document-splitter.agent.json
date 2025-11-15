@@ -1,0 +1,30 @@
+{
+  "name": "document_splitter_agent",
+  "description": "Parses uploaded spec documents into base web definitions and structured feature lists.",
+  "entry_point": "../src/agents/documentSplitter.ts",
+  "runtime": "nodejs18",
+  "capabilities": ["file_read", "memory_write"],
+  "inputs_schema": {
+    "type": "object",
+    "required": ["projectId", "documentPath", "uploadedBy"],
+    "properties": {
+      "projectId": { "type": "string" },
+      "documentPath": { "type": "string" },
+      "uploadedBy": { "type": "string" }
+    }
+  },
+  "outputs_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": { "type": "string" },
+      "features": { "type": "array" }
+    }
+  },
+  "triggers": [
+    {
+      "channel": "document_uploaded",
+      "filter": {}
+    }
+  ]
+}
+

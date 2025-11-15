@@ -1,0 +1,35 @@
+{
+  "name": "feature_proposal_manager_agent",
+  "description": "Creates and moderates feature proposals awaiting approval before work begins.",
+  "entry_point": "../src/agents/featureProposalManager.ts",
+  "runtime": "nodejs18",
+  "capabilities": ["memory_read", "memory_write"],
+  "inputs_schema": {
+    "type": "object",
+    "required": ["proposal"],
+    "properties": {
+      "proposal": { "type": "object" },
+      "decision": {
+        "type": ["object", "null"],
+        "properties": {
+          "status": { "enum": ["approved", "rejected"] },
+          "decided_by": { "type": "string" }
+        }
+      }
+    }
+  },
+  "outputs_schema": {
+    "type": "object",
+    "properties": {
+      "proposal": { "type": "object" },
+      "newFeature": { "type": ["object", "null"] }
+    }
+  },
+  "triggers": [
+    {
+      "channel": "proposal_pipeline",
+      "filter": {}
+    }
+  ]
+}
+

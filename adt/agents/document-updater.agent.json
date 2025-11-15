@@ -1,0 +1,27 @@
+{
+  "name": "document_updater_agent",
+  "description": "Keeps the master document as the single source of truth for states, approvals, and task completions.",
+  "entry_point": "../src/agents/documentUpdater.ts",
+  "runtime": "nodejs18",
+  "capabilities": ["memory_read", "memory_write"],
+  "inputs_schema": {
+    "type": "object",
+    "properties": {
+      "operations": { "type": ["array", "null"] },
+      "log": { "type": ["object", "null"] }
+    }
+  },
+  "outputs_schema": {
+    "type": "object",
+    "properties": {
+      "updated": { "type": "boolean" }
+    }
+  },
+  "triggers": [
+    {
+      "channel": "document_update_channel",
+      "filter": {}
+    }
+  ]
+}
+
