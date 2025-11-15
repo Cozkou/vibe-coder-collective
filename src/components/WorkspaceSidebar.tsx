@@ -1,17 +1,7 @@
 import { FileCode, ListTodo, Layers } from "lucide-react";
-import { NavLink } from "@/components/NavLink";
-import { useLocation } from "react-router-dom";
-
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { useLocation, useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 import FileView from "./FileView";
 import QueueView from "./QueueView";
 import TasksView from "./TasksView";
@@ -23,46 +13,56 @@ const items = [
 ];
 
 const WorkspaceSidebar = () => {
-  const { open } = useSidebar();
+  const [isExpanded, setIsExpanded] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const activeTab = searchParams.get("tab") || "files";
 
-  return (
-    <Sidebar collapsible="offcanvas" className="border-r border-border/50">
-      <SidebarContent className="bg-background/50">
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.value}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={activeTab === item.value}
-                    tooltip={item.title}
-                  >
-                    <NavLink
-                      to={`?tab=${item.value}`}
-                      className="flex items-center gap-3"
-                      activeClassName="bg-accent text-accent-foreground"
-                    >
-                      <item.icon className="w-5 h-5" />
-                      {open && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+  const handleTabChange = (value: string) => {
+    navigate(`?tab=${value}`);
+  };
 
-        <div className="flex-1 overflow-hidden mt-4">
+  return (
+    <div
+      className={cn(
+        "h-full bg-background/50 border-r border-border/50 transition-all duration-300 flex",
+        isExpanded ? "w-72" : "w-16"
+      )}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+    >
+      {/* Icon Navigation */}
+      <div className="w-16 flex flex-col gap-2 p-2 border-r border-border/30">
+        {items.map((item) => {
+          const Icon = item.icon;
+          return (
+            <button
+              key={item.value}
+              onClick={() => handleTabChange(item.value)}
+              className={cn(
+                "w-12 h-12 rounded-lg flex items-center justify-center transition-colors",
+                activeTab === item.value
+                  ? "bg-cosmic-purple/20 text-cosmic-purple"
+                  : "hover:bg-accent/50 text-muted-foreground"
+              )}
+              title={item.title}
+            >
+              <Icon className="w-5 h-5" />
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Content Area */}
+      {isExpanded && (
+        <div className="flex-1 overflow-hidden">
           {activeTab === "files" && <FileView />}
           {activeTab === "queue" && <QueueView />}
           {activeTab === "tasks" && <TasksView />}
         </div>
-      </SidebarContent>
-    </Sidebar>
+      )}
+    </div>
   );
 };
 
