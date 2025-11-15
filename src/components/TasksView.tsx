@@ -13,30 +13,30 @@ const mockTasks = [
 const TasksView = () => {
   return (
     <ScrollArea className="h-full">
-      <div className="p-4 space-y-4">
-        <h3 className="text-sm font-semibold text-muted-foreground mb-4">TASKS</h3>
+      <div className="p-3 space-y-3">
+        <h3 className="text-xs font-mono font-semibold text-retro-amber mb-3">TASKS</h3>
         {mockTasks.map((task) => (
-          <div key={task.id} className="p-3 rounded-lg bg-background/50 border border-border/50 space-y-3">
+          <div key={task.id} className="p-2 rounded bg-background border border-border space-y-2">
             <div className="flex items-start gap-2">
               {task.status === "completed" ? (
-                <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-retro-green shrink-0 mt-0.5" />
               ) : (
-                <Circle className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
+                <Circle className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
               )}
-              <div className="flex-1 space-y-2">
-                <p className={`text-sm ${task.status === "completed" ? "line-through text-muted-foreground" : ""}`}>
+              <div className="flex-1 space-y-1.5">
+                <p className={`text-xs font-mono ${task.status === "completed" ? "line-through text-muted-foreground" : ""}`}>
                   {task.title}
                 </p>
                 <div className="flex items-center gap-2">
-                  <Avatar className="w-6 h-6">
-                    <AvatarFallback className="text-xs bg-cosmic-purple/20">
+                  <Avatar className="w-5 h-5">
+                    <AvatarFallback className="text-xs bg-retro-amber/20 text-retro-amber font-mono">
                       {task.assignee.split(" ")[1]}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-xs text-muted-foreground">{task.assignee}</span>
+                  <span className="text-xs text-muted-foreground font-mono">{task.assignee}</span>
                 </div>
               </div>
-              <Badge variant={task.status === "completed" ? "secondary" : task.status === "in-progress" ? "default" : "outline"}>
+              <Badge variant={task.status === "completed" ? "secondary" : task.status === "in-progress" ? "default" : "outline"} className="text-xs h-5">
                 {task.status}
               </Badge>
             </div>

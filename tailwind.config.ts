@@ -47,20 +47,11 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        cosmic: {
-          purple: "hsl(var(--cosmic-purple))",
-          cyan: "hsl(var(--cosmic-cyan))",
-          indigo: "hsl(var(--cosmic-indigo))",
-          nebula: "hsl(var(--nebula-glow))",
+        retro: {
+          amber: "hsl(var(--retro-amber))",
+          green: "hsl(var(--retro-green))",
+          orange: "hsl(var(--retro-orange))",
         },
-      },
-      backgroundImage: {
-        'gradient-cosmic': 'var(--gradient-cosmic)',
-        'gradient-hero': 'var(--gradient-hero)',
-      },
-      boxShadow: {
-        'glow-primary': 'var(--glow-primary)',
-        'glow-secondary': 'var(--glow-secondary)',
       },
       borderRadius: {
         lg: "var(--radius)",

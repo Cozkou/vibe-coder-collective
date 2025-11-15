@@ -11,17 +11,17 @@ const mockPrompts = [
 const QueueView = () => {
   return (
     <ScrollArea className="h-full">
-      <div className="p-4 space-y-4">
-        <h3 className="text-sm font-semibold text-muted-foreground mb-4">PROMPT QUEUE</h3>
+      <div className="p-3 space-y-3">
+        <h3 className="text-xs font-mono font-semibold text-retro-amber mb-3">PROMPT QUEUE</h3>
         {mockPrompts.map((prompt) => (
-          <div key={prompt.id} className="p-3 rounded-lg bg-background/50 border border-border/50 space-y-2">
+          <div key={prompt.id} className="p-2 rounded bg-background border border-border space-y-1.5">
             <div className="flex items-start justify-between gap-2">
-              <p className="text-sm flex-1">{prompt.content}</p>
-              <Badge variant={prompt.status === "completed" ? "secondary" : "default"} className="shrink-0">
+              <p className="text-xs font-mono flex-1">{prompt.content}</p>
+              <Badge variant={prompt.status === "completed" ? "secondary" : "default"} className="shrink-0 text-xs h-5">
                 {prompt.status}
               </Badge>
             </div>
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground font-mono">
               <Clock className="w-3 h-3" />
               <span>{prompt.time}</span>
             </div>
