@@ -32,13 +32,7 @@ const SandboxPreview = ({ viewMode, onViewModeChange }: SandboxPreviewProps) => 
       </div>
       <div className="flex-1 overflow-hidden">
         {viewMode === "preview" ? (
-          <div className="w-full h-full bg-white">
-            <iframe
-              src="/"
-              className="w-full h-full"
-              title="Preview"
-            />
-          </div>
+          <div className="w-full h-full bg-black" />
         ) : (
           <div className="w-full h-full bg-background overflow-hidden">
             <FileView />
