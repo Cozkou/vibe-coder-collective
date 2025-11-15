@@ -47,16 +47,19 @@ const QueueView = () => {
                   <TooltipTrigger>
                     <Avatar className="w-6 h-6 border-2 border-background">
                       <AvatarFallback 
-                        style={{ backgroundColor: user.color }}
+                        style={{ backgroundColor: user.color || '#3B82F6' }}
                         className="text-white text-[10px] font-mono"
                       >
-                        {user.userName.split(' ').map(n => n[0]).join('').toUpperCase()}
+                        {user.userName 
+                          ? user.userName.split(' ').map(n => n[0]).join('').toUpperCase()
+                          : '?'
+                        }
                       </AvatarFallback>
                     </Avatar>
                   </TooltipTrigger>
                   <TooltipContent>
                     <div className="text-xs space-y-1">
-                      <p className="font-semibold">{user.userName}</p>
+                      <p className="font-semibold">{user.userName || 'Anonymous'}</p>
                       {user.currentPrompt && (
                         <p className="text-muted-foreground">
                           Working on: {user.currentPrompt.substring(0, 30)}...
@@ -89,15 +92,18 @@ const QueueView = () => {
                           <TooltipTrigger>
                             <Avatar className="w-5 h-5 shrink-0">
                               <AvatarFallback 
-                                style={{ backgroundColor: user.color }}
+                                style={{ backgroundColor: user.color || '#3B82F6' }}
                                 className="text-white text-[8px] font-mono"
                               >
-                                {user.userName.split(' ').map(n => n[0]).join('').toUpperCase()}
+                                {user.userName 
+                                  ? user.userName.split(' ').map(n => n[0]).join('').toUpperCase()
+                                  : '?'
+                                }
                               </AvatarFallback>
                             </Avatar>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p className="text-xs">{user.userName}</p>
+                            <p className="text-xs">{user.userName || 'Anonymous'}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>

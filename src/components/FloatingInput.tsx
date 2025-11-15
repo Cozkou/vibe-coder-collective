@@ -123,7 +123,13 @@ const FloatingInput = ({ currentFeature, onClearFeature }: FloatingInputProps) =
           cursor: isDragging ? "grabbing" : "grab",
         }}
       >
-        <div className="flex items-center gap-1 p-2">
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSend();
+          }}
+          className="flex items-center gap-1 p-2"
+        >
           <div
             className="flex items-center justify-center cursor-grab active:cursor-grabbing"
             onMouseDown={handleMouseDown}
@@ -133,14 +139,19 @@ const FloatingInput = ({ currentFeature, onClearFeature }: FloatingInputProps) =
           <Input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
             placeholder="Ask AI assistant..."
             className="bg-background border-border text-xs h-8 w-64"
           />
-          <Button onClick={handleSend} size="icon" className="h-8 w-8 shrink-0">
+          <Button type="submit" size="icon" className="h-8 w-8 shrink-0">
             <Send className="w-3 h-3" />
           </Button>
-        </div>
+        </form>
       </Card>
     </div>
   );

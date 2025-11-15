@@ -1,24 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Paperclip, Mic, ArrowRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Paperclip, Mic, ArrowRight, Users } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import TeamSetupModal from "./TeamSetupModal";
 import homerImage from "@/assets/homer.png";
-import { doc, setDoc, collection, addDoc, Timestamp } from 'firebase/firestore';
+import { doc, setDoc, collection, addDoc, Timestamp, getDoc } from 'firebase/firestore';
 import { db } from '@/integrations/firebase/config';
 
 const Hero = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [mode, setMode] = useState<"create" | "join">("create");
   const [prompt, setPrompt] = useState("");
+  const [joinCode, setJoinCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
 
-  const handleSubmit = async () => {
+  const handleCreateSession = async () => {
     if (!prompt.trim()) {
       toast({
         title: "Please enter a prompt",
@@ -62,6 +65,50 @@ const Hero = () => {
       toast({
         title: "Failed to create session",
         description: "Please check your Firebase configuration",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleJoinSession = async () => {
+    if (!joinCode.trim()) {
+      toast({
+        title: "Please enter a session code",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Check if session exists in Firestore
+      const sessionRef = doc(db, 'sessions', joinCode.trim());
+      const sessionSnap = await getDoc(sessionRef);
+
+      if (!sessionSnap.exists()) {
+        toast({
+          title: "Session not found",
+          description: "Please check the session code and try again",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Session exists, navigate directly
+      toast({
+        title: "Joining session...",
+        description: "Loading workspace...",
+      });
+      
+      navigate(`/workspace/${joinCode.trim()}`);
+    } catch (error) {
+      console.error("Error joining session:", error);
+      toast({
+        title: "Failed to join session",
+        description: "Please try again",
         variant: "destructive",
       });
     } finally {
@@ -263,41 +310,125 @@ root.render(
 
             {/* Prompt Input - Foreground */}
             <Card className="relative z-10 p-6 bg-card/95 backdrop-blur-sm border-border w-full max-w-2xl mt-64">
-              <div className="space-y-4">
-                <Textarea
-                  placeholder="Describe what you want to build..."
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  className="min-h-[80px] bg-background border-border resize-none font-mono text-sm"
-                />
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-2">
+              {/* Mode Toggle */}
+              <div className="flex gap-2 mb-4 border-b border-border pb-2">
+                <Button
+                  variant={mode === "create" ? "default" : "ghost"}
+                  size="sm"
+                  className={mode === "create" ? "bg-retro-amber text-background hover:bg-retro-amber/90 font-mono" : "font-mono"}
+                  onClick={() => setMode("create")}
+                >
+                  <ArrowRight className="w-4 h-4 mr-2" />
+                  Create New
+                </Button>
+                <Button
+                  variant={mode === "join" ? "default" : "ghost"}
+                  size="sm"
+                  className={mode === "join" ? "bg-retro-amber text-background hover:bg-retro-amber/90 font-mono" : "font-mono"}
+                  onClick={() => setMode("join")}
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  Join Existing
+                </Button>
+              </div>
+
+              {/* Create Mode */}
+              {mode === "create" && (
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleCreateSession();
+                  }}
+                  className="space-y-4"
+                >
+                  <Textarea
+                    placeholder="Describe what you want to build..."
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    onKeyDown={(e) => {
+                      // Prevent Enter from submitting, allow Shift+Enter for new line
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleCreateSession();
+                      }
+                    }}
+                    className="min-h-[80px] bg-background border-border resize-none font-mono text-sm"
+                  />
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                      >
+                        <Paperclip className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                      >
+                        <Mic className="w-4 h-4" />
+                      </Button>
+                    </div>
                     <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                      type="submit"
+                      size="sm"
+                      className="bg-retro-amber text-background hover:bg-retro-amber/90 font-mono h-9 px-4 gap-2"
+                      disabled={isLoading}
                     >
-                      <Paperclip className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-9 w-9 text-muted-foreground hover:text-foreground"
-                    >
-                      <Mic className="w-4 h-4" />
+                      {isLoading ? "Creating..." : "Start Building"}
+                      <ArrowRight className="w-4 h-4" />
                     </Button>
                   </div>
-                  <Button
-                    size="sm"
-                    className="bg-retro-amber text-background hover:bg-retro-amber/90 font-mono h-9 px-4 gap-2"
-                    onClick={handleSubmit}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Creating..." : "Start Building"}
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
+                </form>
+              )}
+
+              {/* Join Mode */}
+              {mode === "join" && (
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleJoinSession();
+                  }}
+                  className="space-y-4"
+                >
+                  <div className="space-y-2">
+                    <label className="text-sm font-mono text-muted-foreground">
+                      Enter Session Code
+                    </label>
+                    <Input
+                      placeholder="e.g., 6ee61acf-a17b-453b-8fc0-5913309d3aed"
+                      value={joinCode}
+                      onChange={(e) => setJoinCode(e.target.value)}
+                      onKeyDown={(e) => {
+                        // Submit on Enter
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleJoinSession();
+                        }
+                      }}
+                      className="bg-background border-border font-mono text-sm"
+                    />
+                    <p className="text-xs text-muted-foreground font-mono">
+                      Get the session code from your teammate or the "Copy Session Code" button
+                    </p>
+                  </div>
+                  <div className="flex justify-end">
+                    <Button
+                      type="submit"
+                      size="sm"
+                      className="bg-retro-amber text-background hover:bg-retro-amber/90 font-mono h-9 px-4 gap-2"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "Joining..." : "Join Session"}
+                      <Users className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </form>
+              )}
             </Card>
           </div>
         </div>
