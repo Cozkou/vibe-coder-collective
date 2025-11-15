@@ -1,7 +1,8 @@
-import CodeEditor from "@/components/CodeEditor";
-import UserPresence from "@/components/UserPresence";
+import WorkspaceSidebar from "@/components/WorkspaceSidebar";
+import SandboxPreview from "@/components/SandboxPreview";
+import ChatBot from "@/components/ChatBot";
 import { Button } from "@/components/ui/button";
-import { Home, Moon, Sun } from "lucide-react";
+import { Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Workspace = () => {
@@ -30,22 +31,20 @@ const Workspace = () => {
               VibeCode
             </h1>
           </div>
-          
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon">
-              <Sun className="w-5 h-5" />
-            </Button>
-          </div>
         </div>
       </header>
 
       {/* Main workspace */}
-      <div className="relative z-10 container mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-[1fr_280px] gap-6">
-          <CodeEditor />
-          <div className="space-y-6">
-            <UserPresence />
-          </div>
+      <div className="relative z-10 h-[calc(100vh-73px)] overflow-hidden">
+        <div className="h-full grid grid-cols-[320px_1fr_380px] gap-4 p-4">
+          {/* Left Sidebar */}
+          <WorkspaceSidebar />
+          
+          {/* Center - Sandbox Preview */}
+          <SandboxPreview />
+          
+          {/* Right - Chatbot */}
+          <ChatBot />
         </div>
       </div>
     </div>

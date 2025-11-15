@@ -1,9 +1,81 @@
 import { Button } from "@/components/ui/button";
-import { Code2, Users, Sparkles } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Sparkles, Users, Zap } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import TeamSetupModal from "./TeamSetupModal";
 
 const Hero = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [prompt, setPrompt] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+
+  const handleSubmit = async () => {
+    if (!prompt.trim()) {
+      toast({
+        title: "Please enter a prompt",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("sessions")
+        .insert({
+          created_by: "anonymous",
+          initial_prompt: prompt,
+          team_size: 1,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setSessionId(data.id);
+      setModalOpen(true);
+    } catch (error) {
+      console.error("Error creating session:", error);
+      toast({
+        title: "Failed to create session",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if (sessionId) {
+      navigate(`/workspace/${sessionId}`);
+    }
+  };
+
+  const features = [
+    {
+      icon: Sparkles,
+      title: "AI-Powered",
+      description: "Let AI handle the heavy lifting while you focus on creativity",
+    },
+    {
+      icon: Users,
+      title: "Collaborative",
+      description: "Code together in real-time with your team",
+    },
+    {
+      icon: Zap,
+      title: "Lightning Fast",
+      description: "See changes instantly with hot reload",
+    },
+  ];
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
@@ -14,72 +86,65 @@ const Hero = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cosmic-indigo/10 rounded-full blur-[120px]" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-card/50 backdrop-blur-sm border border-border">
-          <Sparkles className="w-4 h-4 text-cosmic-cyan" />
-          <span className="text-sm text-muted-foreground">Code together, vibe together</span>
-        </div>
+      {/* Hero Content */}
+      <div className="relative z-10 container mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="text-center space-y-4">
+            <h1 className="text-6xl md:text-7xl font-bold">
+              <span className="bg-gradient-to-r from-cosmic-purple via-cosmic-indigo to-cosmic-cyan bg-clip-text text-transparent">
+                VibeCode
+              </span>
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              The collaborative coding environment where teams vibe together
+            </p>
+          </div>
 
-        <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-cosmic-purple via-cosmic-cyan to-cosmic-indigo bg-clip-text text-transparent animate-in fade-in slide-in-from-bottom-4 duration-1000">
-          VibeCode
-        </h1>
-
-        <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-150">
-          A collaborative coding space designed for flow state. Write code with your team in an ambient, distraction-free environment.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
-          <Button 
-            onClick={() => navigate("/workspace")}
-            size="lg" 
-            className="bg-primary hover:bg-primary/90 shadow-glow-primary group"
-          >
-            <Code2 className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
-            Start Coding
-          </Button>
-          <Button 
-            variant="outline" 
-            size="lg"
-            className="border-border/50 backdrop-blur-sm hover:bg-card/50"
-          >
-            <Users className="w-5 h-5 mr-2" />
-            Invite Team
-          </Button>
-        </div>
-
-        {/* Feature cards */}
-        <div className="grid md:grid-cols-3 gap-6 mt-24 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500">
-          {[
-            {
-              icon: Code2,
-              title: "Real-time Collaboration",
-              description: "Code together with live cursors and instant updates"
-            },
-            {
-              icon: Sparkles,
-              title: "Ambient Experience",
-              description: "Focus-enhancing design with subtle animations"
-            },
-            {
-              icon: Users,
-              title: "Team Presence",
-              description: "See who's online and working on what"
-            }
-          ].map((feature, i) => (
-            <div 
-              key={i}
-              className="p-6 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/50 hover:bg-card/50 transition-all hover:scale-105"
-            >
-              <div className="w-12 h-12 rounded-full bg-gradient-cosmic flex items-center justify-center mb-4 mx-auto">
-                <feature.icon className="w-6 h-6 text-foreground" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">{feature.description}</p>
+          {/* Prompt Input */}
+          <Card className="p-6 bg-background/50 backdrop-blur-sm border-border/50">
+            <div className="space-y-4">
+              <Textarea
+                placeholder="Describe what you want to build... (e.g., Create a modern dashboard with user authentication)"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                className="min-h-[120px] bg-background/50 border-border/50 resize-none"
+              />
+              <Button 
+                size="lg"
+                className="w-full bg-gradient-to-r from-cosmic-purple to-cosmic-cyan hover:opacity-90 text-white"
+                onClick={handleSubmit}
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating..." : "Start Building"}
+              </Button>
             </div>
-          ))}
+          </Card>
+
+          {/* Features */}
+          <div className="grid md:grid-cols-3 gap-6 mt-12">
+            {features.map((feature, i) => (
+              <div
+                key={i}
+                className="p-6 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/50 hover:bg-card/50 transition-all"
+              >
+                <div className="w-12 h-12 rounded-full bg-gradient-cosmic flex items-center justify-center mb-4">
+                  <feature.icon className="w-6 h-6 text-foreground" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground">{feature.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+
+      {sessionId && (
+        <TeamSetupModal
+          open={modalOpen}
+          onClose={handleModalClose}
+          sessionId={sessionId}
+        />
+      )}
     </div>
   );
 };
