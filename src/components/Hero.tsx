@@ -27,10 +27,13 @@ const Hero = () => {
 
     setIsLoading(true);
     try {
+      // Generate a UUID for anonymous user
+      const anonymousId = crypto.randomUUID();
+      
       const { data, error } = await supabase
         .from("sessions")
         .insert({
-          created_by: "anonymous",
+          created_by: anonymousId,
           initial_prompt: prompt,
           team_size: 1,
         })
