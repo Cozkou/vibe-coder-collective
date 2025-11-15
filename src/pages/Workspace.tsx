@@ -3,17 +3,28 @@ import SandboxPreview from "@/components/SandboxPreview";
 import FloatingInput from "@/components/FloatingInput";
 import ShareCodeModal from "@/components/ShareCodeModal";
 import { Button } from "@/components/ui/button";
-import { Home, Focus, Bell, Share2 } from "lucide-react";
+import { Home, Bell, Copy } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const Workspace = () => {
   const navigate = useNavigate();
   const { id: sessionId } = useParams();
-  const [isFocusMode, setIsFocusMode] = useState(false);
   const [viewMode, setViewMode] = useState<"preview" | "code" | "document">("preview");
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [currentFeature, setCurrentFeature] = useState<string | undefined>();
+  const { toast } = useToast();
+
+  const handleCopyCode = () => {
+    if (sessionId) {
+      navigator.clipboard.writeText(sessionId);
+      toast({
+        title: "Code copied!",
+        description: "Session code copied to clipboard",
+      });
+    }
+  };
 
   const handleFeatureClick = (feature: string) => {
     setCurrentFeature(feature);
@@ -46,25 +57,19 @@ const Workspace = () => {
             </h1>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShareModalOpen(true)}
-              className="h-8 gap-2 font-mono text-xs"
-            >
-              <Share2 className="w-3 h-3" />
-              Share
-            </Button>
-            <Button
-              variant={isFocusMode ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setIsFocusMode(!isFocusMode)}
-              className="h-8 gap-2 font-mono text-xs"
-            >
-              <Focus className="w-3 h-3" />
-              Adaptive Focus Mode
-            </Button>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-3 py-1 bg-muted/50 rounded border border-border">
+              <span className="text-xs font-mono text-muted-foreground">Code:</span>
+              <span className="text-xs font-mono font-semibold">{sessionId}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleCopyCode}
+                className="h-5 w-5"
+              >
+                <Copy className="w-3 h-3" />
+              </Button>
+            </div>
             <Button
               variant="ghost"
               size="icon"
@@ -78,16 +83,11 @@ const Workspace = () => {
 
       {/* Main workspace */}
       <div className="h-[calc(100vh-57px)] overflow-hidden flex relative">
-        {/* Dimming overlay for focus mode */}
-        {isFocusMode && (
-          <div className="absolute inset-0 bg-background/80 z-10 pointer-events-none" />
-        )}
-        
-        {/* Left Sidebar - hidden in focus mode */}
-        {!isFocusMode && <WorkspaceSidebar onFeatureClick={handleFeatureClick} />}
+        {/* Left Sidebar */}
+        <WorkspaceSidebar onFeatureClick={handleFeatureClick} />
 
         {/* Center - Sandbox Preview */}
-        <div className={`flex-1 ${isFocusMode ? 'relative z-20' : ''}`}>
+        <div className="flex-1">
           <SandboxPreview viewMode={viewMode} onViewModeChange={setViewMode} />
         </div>
       </div>
