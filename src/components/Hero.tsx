@@ -82,7 +82,7 @@ const Hero = () => {
       {/* Hero Content */}
       <div className="relative z-10 container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center space-y-4 mb-8">
+          <div className="text-center space-y-4 mb-4 -mt-12">
             <h1 className="text-5xl md:text-6xl font-mono font-bold text-retro-amber">
               HomerIDE
             </h1>
@@ -94,7 +94,7 @@ const Hero = () => {
           {/* Centered Layout with Image and Form */}
           <div className="relative flex items-center justify-center">
             {/* Homer Image - Background */}
-            <div className="absolute">
+            <div className="absolute -top-8">
               <img 
                 src={homerImage} 
                 alt="Homer Simpson" 
