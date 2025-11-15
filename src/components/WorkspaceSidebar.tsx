@@ -1,40 +1,68 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
 import { FileCode, ListTodo, Layers } from "lucide-react";
+import { NavLink } from "@/components/NavLink";
+import { useLocation } from "react-router-dom";
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import FileView from "./FileView";
 import QueueView from "./QueueView";
 import TasksView from "./TasksView";
 
+const items = [
+  { title: "Files", value: "files", icon: FileCode },
+  { title: "Queue", value: "queue", icon: Layers },
+  { title: "Tasks", value: "tasks", icon: ListTodo },
+];
+
 const WorkspaceSidebar = () => {
+  const { open } = useSidebar();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const activeTab = searchParams.get("tab") || "files";
+
   return (
-    <Card className="h-full bg-background/50 border-border/50 overflow-hidden">
-      <Tabs defaultValue="files" className="h-full flex flex-col">
-        <TabsList className="w-full justify-start rounded-none border-b border-border/50 bg-transparent p-0">
-          <TabsTrigger value="files" className="flex-1 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-cosmic-purple">
-            <FileCode className="w-4 h-4 mr-2" />
-            Files
-          </TabsTrigger>
-          <TabsTrigger value="queue" className="flex-1 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-cosmic-cyan">
-            <Layers className="w-4 h-4 mr-2" />
-            Queue
-          </TabsTrigger>
-          <TabsTrigger value="tasks" className="flex-1 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-cosmic-indigo">
-            <ListTodo className="w-4 h-4 mr-2" />
-            Tasks
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="files" className="flex-1 m-0 overflow-hidden">
-          <FileView />
-        </TabsContent>
-        <TabsContent value="queue" className="flex-1 m-0 overflow-hidden">
-          <QueueView />
-        </TabsContent>
-        <TabsContent value="tasks" className="flex-1 m-0 overflow-hidden">
-          <TasksView />
-        </TabsContent>
-      </Tabs>
-    </Card>
+    <Sidebar collapsible="offcanvas" className="border-r border-border/50">
+      <SidebarContent className="bg-background/50">
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.value}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={activeTab === item.value}
+                    tooltip={item.title}
+                  >
+                    <NavLink
+                      to={`?tab=${item.value}`}
+                      className="flex items-center gap-3"
+                      activeClassName="bg-accent text-accent-foreground"
+                    >
+                      <item.icon className="w-5 h-5" />
+                      {open && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <div className="flex-1 overflow-hidden mt-4">
+          {activeTab === "files" && <FileView />}
+          {activeTab === "queue" && <QueueView />}
+          {activeTab === "tasks" && <TasksView />}
+        </div>
+      </SidebarContent>
+    </Sidebar>
   );
 };
 
