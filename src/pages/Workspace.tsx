@@ -2,6 +2,7 @@ import WorkspaceSidebar from "@/components/WorkspaceSidebar";
 import SandboxPreview from "@/components/SandboxPreview";
 import FloatingInput from "@/components/FloatingInput";
 import ShareCodeModal from "@/components/ShareCodeModal";
+import TutorialOverlay from "@/components/TutorialOverlay";
 import { Button } from "@/components/ui/button";
 import { Home, Bell, Copy } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -75,6 +76,9 @@ const Workspace = () => {
       {/* Floating Input */}
       <FloatingInput currentFeature={currentFeature} onClearFeature={handleClearFeature} />
       {sessionId && <ShareCodeModal open={shareModalOpen} onClose={() => setShareModalOpen(false)} sessionId={sessionId} />}
+      
+      {/* Tutorial Overlay */}
+      <TutorialOverlay sessionId={sessionId} />
     </div>;
 };
 export default Workspace;
