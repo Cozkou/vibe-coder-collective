@@ -103,7 +103,7 @@ const Hero = () => {
             </div>
 
             {/* Prompt Input - Foreground */}
-            <Card className="relative z-10 p-6 bg-card/95 backdrop-blur-sm border-border w-full max-w-2xl mt-48">
+            <Card className="relative z-10 p-6 bg-card/95 backdrop-blur-sm border-border w-full max-w-2xl mt-64">
               <div className="space-y-4">
                 <Textarea
                   placeholder="Describe what you want to build..."
