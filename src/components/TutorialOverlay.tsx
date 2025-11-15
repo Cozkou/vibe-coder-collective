@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import homerImage from "@/assets/homer-tutorial.png";
+import homerImage2 from "@/assets/homer-tutorial-2.png";
 
 interface TutorialOverlayProps {
   sessionId?: string;
@@ -70,7 +71,7 @@ const TutorialOverlay = ({ sessionId, onFeatureClicked }: TutorialOverlayProps) 
       {/* Homer - Big with bottom half cut off */}
       <div className="w-80 h-64 overflow-hidden">
         <img 
-          src={homerImage} 
+          src={currentStep === 1 ? homerImage : homerImage2} 
           alt="Homer Simpson" 
           className="w-full h-auto object-contain"
         />
