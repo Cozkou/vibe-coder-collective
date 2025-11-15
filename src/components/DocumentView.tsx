@@ -21,20 +21,8 @@ const DocumentView = ({ onFeatureClick }: DocumentViewProps) => {
   ];
 
   useEffect(() => {
-    const fetchSpec = async () => {
-      if (!sessionId) return;
-      
-      const { data, error } = await supabase
-        .from("sessions")
-        .select("initial_prompt")
-        .eq("id", sessionId)
-        .single();
-
-      if (data && !error) {
-        setSpec(data.initial_prompt);
-      } else {
-        // Mock data for now
-        setSpec(`Product Specification: Collaborative Workspace Platform
+    // Always use mock data for now
+    setSpec(`Product Specification: Collaborative Workspace Platform
 
 Overview:
 A modern, real-time collaborative workspace designed for distributed teams to work together seamlessly. This platform combines project management, document collaboration, and team communication in one unified interface.
@@ -53,11 +41,7 @@ Technical Stack:
 
 Target Users:
 Remote teams, startups, and small to medium-sized businesses looking for an all-in-one collaboration solution.`);
-      }
-    };
-
-    fetchSpec();
-  }, [sessionId]);
+  }, []);
 
   useEffect(() => {
     if (!spec) return;
