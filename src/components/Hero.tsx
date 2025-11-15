@@ -65,6 +65,20 @@ const Hero = () => {
 
   return (
     <div className="relative h-screen flex items-center justify-center overflow-hidden bg-background">
+      {/* Grid Background */}
+      <div 
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at center, hsl(45 100% 55%) 1px, transparent 1px),
+            linear-gradient(to right, hsl(45 100% 55% / 0.1) 1px, transparent 1px),
+            linear-gradient(to bottom, hsl(45 100% 55% / 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px, 50px 50px, 50px 50px',
+          backgroundPosition: '0 0, 0 0, 0 0'
+        }}
+      />
+      
       {/* Hero Content */}
       <div className="relative z-10 container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
@@ -89,13 +103,13 @@ const Hero = () => {
             </div>
 
             {/* Right: Prompt Input */}
-            <Card className="p-4 bg-card border-border">
-              <div className="space-y-3">
+            <Card className="p-6 bg-card border-border">
+              <div className="space-y-4">
                 <Textarea
                   placeholder="Describe what you want to build..."
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  className="min-h-[60px] bg-background border-border resize-none font-mono text-sm"
+                  className="min-h-[80px] bg-background border-border resize-none font-mono text-sm"
                 />
                 <div className="flex items-center justify-between">
                   <div className="flex gap-2">
